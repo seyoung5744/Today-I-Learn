@@ -1,8 +1,8 @@
 package com.example.springvalidationtest.validation;
 
+import com.example.springvalidationtest.validation.validator.ValidEnum;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +22,6 @@ public class EnumRequestDto {
     @NotNull(message = "나이는 null 일 수 없습니다.")
     private Integer age;
 
-    @EnumPattern(regexp = "USER|ADMIN")
+    @ValidEnum(enumClass = Role.class)
     private Role role;
 }
