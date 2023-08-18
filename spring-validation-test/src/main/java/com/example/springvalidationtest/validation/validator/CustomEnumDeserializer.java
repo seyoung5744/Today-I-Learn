@@ -11,6 +11,7 @@ public class CustomEnumDeserializer <T extends Enum<T>> extends JsonDeserializer
     @Override
     public T deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         final String value = p.getValueAsString();
+        System.out.println(value);
         final Class<?> dtoClass = p.getCurrentValue().getClass();
         final String fieldName = p.currentName();
 

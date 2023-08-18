@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 public class TestService {
 
     public void testParam(EnumRequestDto dto) {
+
+        Enum.valueOf(Role.class, "ABC");
 //
 //        TestEntity.builder()
 //            .email(dto.getEmail())
