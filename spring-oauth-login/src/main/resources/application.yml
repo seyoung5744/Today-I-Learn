@@ -1,0 +1,10 @@
+
+
+oauth:
+  google:
+    client-id: 786993775110-2ovjaiidekvcocqolmpij3rn2nnobjj5.apps.googleusercontent.com
+    secret: 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
+    url:
+      auth: https://oauth2.googleapis.com/token
+      api: https://www.googleapis.com/oauth2
+
