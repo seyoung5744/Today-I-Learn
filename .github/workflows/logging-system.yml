@@ -34,5 +34,7 @@ jobs:
         shell: bash
       
       - name: Build with Gradle
-        run: ./Spring/spring-deploy/gradlew build
+        run: |
+          cd ./Spring/spring-deploy
+          ./gradlew build
         shell: bash
