@@ -30,9 +30,9 @@ jobs:
           java-version: '11'
           
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x ./Spring/Spring-deploy/gradlew
         shell: bash
       
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./Spring/Spring-deploy/gradlew build
         shell: bash
