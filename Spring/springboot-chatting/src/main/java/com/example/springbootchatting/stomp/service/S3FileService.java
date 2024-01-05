@@ -80,7 +80,7 @@ public class S3FileService implements FileService {
 
     @Override
     public void deleteFileDir(String path) {
-        for (S3ObjectSummary summary : amazonS3.listObjects(bucket, path).getObjectSummaries()) {
+        for (S3ObjectSummary summary : amazonS3.listObjects(bucket, "CHATTING/" + path).getObjectSummaries()) {
             amazonS3.deleteObject(bucket, summary.getKey());
         }
     }
