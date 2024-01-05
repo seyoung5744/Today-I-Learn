@@ -1,17 +1,23 @@
 package com.example.springbootchatting.stomp.repository;
 
 import com.example.springbootchatting.stomp.dto.ChatRoom;
+import com.example.springbootchatting.stomp.service.FileService;
 import java.util.*;
 import javax.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 // 추후 DB 와 연결 시 Service 와 Repository(DAO) 로 분리 예정
 @Slf4j
 @Repository
+@RequiredArgsConstructor
 public class ChatRepository {
 
     private Map<String, ChatRoom> chatRoomMap;
+
+    private final FileService fileService;
 
     @PostConstruct
     private void init() {
@@ -32,8 +38,18 @@ public class ChatRepository {
     }
 
     // roomName 로 채팅방 만들기
-    public ChatRoom createChatRoom(String roomName) {
-        ChatRoom chatRoom = ChatRoom.create(roomName); // 채팅룸 이름으로 채팅 룸 생성 후
+    public ChatRoom createChatRoom(String roomName, String roomPwd, boolean secretChk, int maxUserCnt) {
+        // roomName 와 roomPwd 로 chatRoom 빌드 후 return
+
+        ChatRoom chatRoom = ChatRoom.builder()
+            .roomId(UUID.randomUUID().toString())
+            .roomName(roomName)
+            .roomPwd(roomPwd) // 채팅방 패스워드
+            .secretChk(secretChk) // 채팅방 잠금 여부
+            .userList(new HashMap<String, String>())
+            .userCount(0) // 채팅방 참여 인원수
+            .maxUserCnt(maxUserCnt) // 최대 인원수 제한
+            .build();
 
         // map 에 채팅룸 아이디와 만들어진 채팅룸을 저장장
         chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
@@ -51,6 +67,15 @@ public class ChatRepository {
     public void minusUserCnt(String roomId) {
         ChatRoom room = chatRoomMap.get(roomId);
         room.setUserCount(room.getUserCount() - 1);
+    }
+
+    // maxUserCnt 에 따른 채팅방 입장 여부
+    public boolean chkRoomUserCnt(String roomId){
+        ChatRoom room = chatRoomMap.get(roomId);
+
+        log.info("참여인원 확인 [{}, {}]", room.getUserCount(), room.getMaxUserCnt());
+
+        return room.getUserCount() + 1 <= room.getMaxUserCnt();
     }
 
     // 채팅방 유저 리스트에 유저 추가
@@ -102,5 +127,26 @@ public class ChatRepository {
         // value 값만 뽑아내서 list 에 저장 후 reutrn
         room.getUserList().forEach((key, value) -> list.add(value));
         return list;
+    }
+
+    // 채팅방 비밀번호 조회
+    public boolean confirmPwd(String roomId, String roomPwd) {
+        return roomPwd.equals(chatRoomMap.get(roomId).getRoomPwd());
+    }
+
+    // 채팅방 삭제
+    public void delChatRoom(String roomId) {
+        try {
+            // 채팅방 삭제
+            chatRoomMap.remove(roomId);
+
+            // 채팅방 안에 있는 파일 삭제
+            fileService.deleteFileDir(roomId);
+
+            log.info("삭제 완료 roomId : {}", roomId);
+
+        } catch (Exception e) { // 만약에 예외 발생시 확인하기 위해서 try catch
+            System.out.println(e.getMessage());
+        }
     }
 }
