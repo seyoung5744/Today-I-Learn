@@ -1,4 +1,4 @@
-package com.example.springbootrabbitmq;
+package com.example.springbootrabbitmq.tutorial02;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -6,12 +6,11 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import java.nio.charset.StandardCharsets;
 
-public class Recv {
+public class Worker {
 
     private final static String QUEUE_NAME = "hello";
 
-    public static void main(String[] args) throws Exception{
-
+    public static void main(String[] args) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
 
@@ -24,16 +23,26 @@ public class Recv {
 
         DeliverCallback callback = (consumerTag, delivery) -> {
             String msg = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            System.out.println("[X] Received : " + msg);
+            System.out.println("[x] Received : " + msg);
+
+            try{
+                doWork(msg);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                System.out.println(" [x] Done");
+            }
         };
 
-        /*
-        public abstract String basicConsume(String s,
-                                    boolean b,
-                                    com.rabbitmq.client.DeliverCallback deliverCallback,
-                                    com.rabbitmq.client.CancelCallback cancelCallback)
-        */
-        channel.basicConsume(QUEUE_NAME, true, callback, consumerTag -> {});
+        boolean autoAck = true;
+        channel.basicConsume(QUEUE_NAME, autoAck, callback, consumerTag -> {});
     }
 
+    private static void doWork(String task) throws InterruptedException {
+
+        // 점 1개당 1초 지연
+        for(char ch : task.toCharArray()) {
+            if(ch == '.') Thread.sleep(1000);
+        }
+    }
 }
