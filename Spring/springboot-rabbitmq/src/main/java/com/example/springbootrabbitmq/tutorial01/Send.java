@@ -1,4 +1,4 @@
-package com.example.springbootrabbitmq;
+package com.example.springbootrabbitmq.tutorial01;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
