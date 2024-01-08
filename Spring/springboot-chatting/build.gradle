@@ -25,6 +25,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
     // sockjs
     implementation 'org.webjars:sockjs-client:1.5.1'
@@ -35,6 +36,27 @@ dependencies {
 
     // aws s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    //외부 브로커를 사용하기 위해
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-reactor-netty
+    implementation 'org.springframework.boot:spring-boot-starter-reactor-netty'
+
+    //jackson2json에서 LocalDateTime을 handling 하기 위해
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // security
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // spring oauth2
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-client
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    runtimeOnly 'com.h2database:h2'
+    testRuntimeOnly 'com.h2database:h2'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

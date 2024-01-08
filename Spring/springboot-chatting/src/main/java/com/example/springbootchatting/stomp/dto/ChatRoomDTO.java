@@ -1,8 +1,6 @@
 package com.example.springbootchatting.stomp.dto;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,7 +9,7 @@ import lombok.Data;
 // 메시지를 다른 세션의 클라이언트에게 발송하는 것도 구현 필요가 없다!
 @Data
 @Builder
-public class ChatRoom {
+public class ChatRoomDTO {
 
     private String roomId; // 채팅방 아이디
     private String roomName; // 채팅방 이름
