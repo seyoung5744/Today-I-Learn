@@ -1,13 +1,12 @@
 package chap03;
 
-import jdk.jfr.BooleanFlag;
-
 public class Apple implements Fruit {
 
     private Integer weight = 0;
     private Color color;
 
-    public Apple() {}
+    public Apple() {
+    }
 
     public Apple(Integer weight) {
         this.weight = weight;

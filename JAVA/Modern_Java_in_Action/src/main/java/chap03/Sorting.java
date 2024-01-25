@@ -52,6 +52,22 @@ public class Sorting {
         // [Apple{color=RED, weight=10}, Apple{color=RED, weight=20}, Apple{color=GREEN, weight=155}]
         inventory.sort(comparing(Apple::getWeight));
         System.out.println(inventory);
+
+        // 5
+        // [Apple{color=GREEN, weight=155}, Apple{color=RED, weight=20}, Apple{color=RED, weight=10}]
+        inventory.sort(comparing(Apple::getWeight).reversed());
+        System.out.println(inventory);
+
+        // reshuffling things a little
+        inventory.add(new Apple(10, Color.GREEN));
+
+        // 6
+        // [Apple{color=GREEN, weight=155}, Apple{color=RED, weight=20}, Apple{color=RED, weight=10}, Apple{color=GREEN, weight=10}]
+        inventory.sort(comparing(Apple::getWeight)
+            .reversed()
+            .thenComparing(Apple::getColor));
+
+        System.out.println(inventory);
     }
 
     static class AppleComparator implements Comparator<Apple> {

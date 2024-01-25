@@ -12,6 +12,7 @@ import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
@@ -72,6 +73,8 @@ public class FunctionalInterfaceTest {
         System.out.println(a3);
 
         System.out.println(giveMeFruit("Orange", 110));
+
+
     }
 
     static Map<String, Function<Integer, Fruit>> map = new HashMap<>();
@@ -91,11 +94,11 @@ public class FunctionalInterfaceTest {
         System.out.println(System.identityHashCode(portNum2));
     }
 
-    @FunctionalInterface
-    public interface Predicate<T> {
-
-        boolean test(T t);
-    }
+//    @FunctionalInterface
+//    public interface Predicate<T> {
+//
+//        boolean test(T t);
+//    }
 
     public static <T> List<T> filter(List<T> list, Predicate<T> p) {
         List<T> result = new ArrayList<>();
