@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity(name = "TEST_MEMBER")
@@ -19,7 +18,7 @@ public class Member extends BaseEntity {
     @Column(name = "USERNAME")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id") // Team 레퍼런스와 테이블의 FK 와 매핑
     private Team team;
 
@@ -42,6 +41,10 @@ public class Member extends BaseEntity {
 
     public Member(Long id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public Member(String name) {
         this.name = name;
     }
 

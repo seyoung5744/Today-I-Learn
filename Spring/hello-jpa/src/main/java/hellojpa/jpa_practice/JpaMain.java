@@ -18,30 +18,23 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 저장
-//            for (int i = 0; i < 100; i++) {
-//                Member member = new Member();
-//                member.setId((long) i);
-//                member.setName("Hello" + i);
-//                em.persist(member);
-//            }
 
-//            em.persist(member);
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            // 조회 및 수정
-//            Member findMember = em.find(Member.class, 2L);
-//            findMember.setName("HelloJPA");
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
 
-            // JPQL
-            List<Member> result = em.createQuery("select m from Member m", Member.class).getResultList();
-            System.out.println(result);
+            em.persist(parent); // parent만 persist 해주니 child도 같이 persist된다.
+//            em.persist(child1);
+//            em.persist(child2);
 
-            // JPQL Paging
-            List<Member> pagingResult = em.createQuery("select m from Member m", Member.class)
-                .setFirstResult(5)
-                .setMaxResults(8)
-                .getResultList();
-            System.out.println(pagingResult);
+            em.flush();
+            em.clear();
+
+            Parent findParent = em.find(Parent.class, parent.getId());
+            em.remove(findParent);
 
             tx.commit();
         } catch (Exception e) {
