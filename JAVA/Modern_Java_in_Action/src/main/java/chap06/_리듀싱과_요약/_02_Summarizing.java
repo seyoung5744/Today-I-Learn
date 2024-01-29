@@ -1,6 +1,6 @@
 package chap06._리듀싱과_요약;
 
-import static chap04.Dish.menu;
+import static chap06.Dish.menu;
 import static java.util.stream.Collectors.averagingInt;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.joining;
@@ -8,7 +8,7 @@ import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.summarizingInt;
 import static java.util.stream.Collectors.summingInt;
 
-import chap04.Dish;
+import chap06.Dish;
 import java.util.Comparator;
 import java.util.IntSummaryStatistics;
 import java.util.function.BinaryOperator;
