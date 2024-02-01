@@ -1,8 +1,12 @@
 package chap07.병렬_스트림;
 
+import chap07.포크_조인_프레임워크.ForkJoinSumCalculator;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
 
 public class ParallelStreamsHarness {
+
+    public static final ForkJoinPool FORK_JOIN_POOL = new ForkJoinPool();
 
     public static void main(String[] args) {
         System.out.println("Iterative Sum done in: " + measurePerf(ParallelStreams::iterativeSum, 10_000_000L) + " msecs");
@@ -15,7 +19,7 @@ public class ParallelStreamsHarness {
         System.out.println("SideEffect sum done in: " + measurePerf(ParallelStreams::sideEffectSum, 10_000_000L) + " msecs" );
         System.out.println("SideEffect parallel sum done in: " + measurePerf(ParallelStreams::sideEffectParallelSum, 10_000_000L) + " msecs" );
 
-//        System.out.println("ForkJoin sum done in: " + measurePerf(ForkJoinSumCalculator::forkJoinSum, 10_000_000L) + " msecs" );
+        System.out.println("ForkJoin sum done in: " + measurePerf(ForkJoinSumCalculator::forkJoinSum, 10_000_000L) + " msecs" );
     }
 
     public static <T, R> long measurePerf(Function<T, R> f, T input) {
