@@ -1,19 +1,42 @@
 plugins {
     id 'java'
+//    id "me.champeau.gradle.jmh" version "0.5.3"
+    id "me.champeau.jmh" version "0.7.2"
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+
+wrapper {
+    gradleVersion = '8.5'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation 'org.openjdk.jmh:jmh-core:1.36'
+    implementation 'org.openjdk.jmh:jmh-generator-annprocess:1.36'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 test {
     useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'org.openjdk.jmh.Main'
+        )
+    }
 }
