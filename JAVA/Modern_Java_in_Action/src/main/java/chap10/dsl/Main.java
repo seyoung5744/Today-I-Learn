@@ -1,5 +1,6 @@
 package chap10.dsl;
 
+import static chap10.dsl.LambdaOrderBuilder.order;
 import static chap10.dsl.MethodChainingOrderBuilder.forCustomer;
 import static chap10.dsl.NestedFunctionOrderBuilder.at;
 import static chap10.dsl.NestedFunctionOrderBuilder.buy;
@@ -81,7 +82,28 @@ public class Main {
     }
 
     private void lambda() {
+        Order order = order(o -> {
+            o.forCustomer("BigBand");
+            o.buy(t -> {
+                t.quantity(80);
+                t.price(125.00);
+                t.stock(s -> {
+                    s.symbol("IBM");
+                    s.market("NYSE");
+                });
+            });
+            o.sell(t -> {
+                t.quantity(50);
+                t.price(375.00);
+                t.stock(s -> {
+                    s.symbol("GOOGLE");
+                    s.market("NASDAQ");
+                });
+            });
+        });
 
+        System.out.println("Lambda:");
+        System.out.println(order);
     }
 
     private void mixed() {
