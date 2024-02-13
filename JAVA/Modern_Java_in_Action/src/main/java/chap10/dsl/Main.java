@@ -1,6 +1,12 @@
 package chap10.dsl;
 
 import static chap10.dsl.MethodChainingOrderBuilder.forCustomer;
+import static chap10.dsl.NestedFunctionOrderBuilder.at;
+import static chap10.dsl.NestedFunctionOrderBuilder.buy;
+import static chap10.dsl.NestedFunctionOrderBuilder.on;
+import static chap10.dsl.NestedFunctionOrderBuilder.order;
+import static chap10.dsl.NestedFunctionOrderBuilder.sell;
+import static chap10.dsl.NestedFunctionOrderBuilder.stock;
 
 import chap10.dsl.model.Order;
 import chap10.dsl.model.Stock;
@@ -62,6 +68,16 @@ public class Main {
     }
 
     private void nestedFunction() {
+
+        Order order = order("BigBank",
+            buy(80,
+                stock("IBM", on("NYSE")), at(125.00)),
+            sell(50,
+                stock("GOOGLE", on("NASDAQ")), at(375.00))
+        );
+
+        System.out.println("Nested function:");
+        System.out.println(order);
     }
 
     private void lambda() {
