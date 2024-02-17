@@ -49,7 +49,7 @@ public class OrderRepository {
         // 회원 이름 검색
         if (StringUtils.hasText(orderSearch.getMemberName())) {
             if (isFirstCondition) {
-                jpql += " wher";
+                jpql += " where";
                 isFirstCondition = false;
             } else {
                 jpql += " and";
