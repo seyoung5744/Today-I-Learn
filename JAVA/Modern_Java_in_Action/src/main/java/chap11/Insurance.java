@@ -1,4 +1,4 @@
-package chap11._11_2;
+package chap11;
 
 public class Insurance {
 
