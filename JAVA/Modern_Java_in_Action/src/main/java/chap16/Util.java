@@ -3,13 +3,25 @@ package chap16;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.Random;
 
 public class Util {
 
+    private static final Random RANDOM = new Random(0);
     private static final DecimalFormat formatter = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
 
     public static void delay() {
         int delay = 1000;
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void randomDelay() {
+        int delay = 1000 + RANDOM.nextInt(3000);
+        System.out.println("random = " + delay);
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
