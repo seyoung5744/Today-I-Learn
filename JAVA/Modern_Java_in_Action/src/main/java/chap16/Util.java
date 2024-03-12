@@ -20,8 +20,7 @@ public class Util {
     }
 
     public static void randomDelay() {
-        int delay = 1000 + RANDOM.nextInt(3000);
-        System.out.println("random = " + delay);
+        int delay = 500 + RANDOM.nextInt(2000);
         try {
             Thread.sleep(delay);
         } catch (InterruptedException e) {
