@@ -1,4 +1,4 @@
-package chap19._19_2;
+package chap19._19_2_영속_자료구조;
 
 import chap03.FunctionalInterfaceTest.Consumer;
 

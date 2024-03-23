@@ -1,7 +1,7 @@
-package chap19._19_2;
+package chap19._19_2_영속_자료구조;
 
-import static chap19._19_2.Tree.fupdate;
-import static chap19._19_2.Tree.lookup;
+import static chap19._19_2_영속_자료구조.Tree.fupdate;
+import static chap19._19_2_영속_자료구조.Tree.lookup;
 
 public class PersistentTreeMain {
 
