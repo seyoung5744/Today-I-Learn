@@ -19,9 +19,5 @@ public class Book {
         Arrays.asList(authors).stream().forEach(a -> {
             System.out.println(a.name());
         });
-
-        cleanCars(Collections.<Book>emptyList());
     }
-
-    static void cleanCars(List<Book> cars) {}
 }
