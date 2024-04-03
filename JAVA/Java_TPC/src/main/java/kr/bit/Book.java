@@ -7,4 +7,14 @@ public class Book {
     public int price;
     public String company;
     public int page;
+
+    @Override
+    public String toString() {
+        return "Book{" +
+            "title='" + title + '\'' +
+            ", price=" + price +
+            ", company='" + company + '\'' +
+            ", page=" + page +
+            '}';
+    }
 }
