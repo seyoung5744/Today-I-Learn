@@ -6,27 +6,61 @@ public class MoneyTest {
 
     @Test
     public void multiplicationTest() {
-        //given
         Dollar five = new Dollar(5);
 
-        //when
-        five.times(2);
-
-        //then
-        assertThat(five.amount).isEqualTo(10);
+        assertThat(new Dollar(10)).isEqualTo(five.times(2));
+        assertThat(new Dollar(15)).isEqualTo(five.times(3));
     }
 
+    @Test
+    public void equality() {
+        assertThat(new Dollar(5)).isEqualTo(new Dollar(5));
+        assertThat(new Dollar(5)).isNotEqualTo(new Dollar(6));
+        assertThat(new Franc(5)).isEqualTo(new Franc(5));
+        assertThat(new Franc(5)).isNotEqualTo(new Franc(6));
+        assertThat(new Franc(5)).isNotEqualTo(new Dollar(5));
+    }
+
+    @Test
+    public void francMultiplicationTest() {
+        Franc five = new Franc(5);
+
+        assertThat(new Franc(10)).isEqualTo(five.times(2));
+        assertThat(new Franc(15)).isEqualTo(five.times(3));
+    }
 }
 
-class Dollar {
+class Money {
 
-    int amount;
+    protected int amount;
+
+    @Override
+    public boolean equals(Object obj) {
+        Money money = (Money) obj;
+        return amount == money.amount
+            && getClass().equals(money.getClass());
+    }
+}
+
+class Dollar extends Money {
 
     Dollar(int amount) {
         this.amount = amount;
     }
 
-    void times(int multiplier) {
-        amount *= multiplier;
+    Dollar times(int multiplier) {
+        return new Dollar(amount * multiplier);
     }
 }
+
+class Franc extends Money {
+
+    Franc(int amount) {
+        this.amount = amount;
+    }
+
+    Franc times(int multiplier) {
+        return new Franc(amount * multiplier);
+    }
+}
+
