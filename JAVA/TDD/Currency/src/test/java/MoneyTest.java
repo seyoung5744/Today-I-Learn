@@ -14,6 +14,15 @@ public class MoneyTest {
         product = five.times(3);
         assertThat(product.amount).isEqualTo(15);
     }
+
+    @Test
+    public void equality() {
+        assertThat(new Dollar(5)).isEqualTo(new Dollar(5));
+        assertThat(new Dollar(5).equals(new Dollar(5))).isTrue();
+
+        assertThat(new Dollar(5)).isNotEqualTo(new Dollar(6));
+        assertThat(new Dollar(5).equals(new Dollar(6))).isFalse();
+    }
 }
 
 class Dollar {
@@ -26,5 +35,11 @@ class Dollar {
 
     Dollar times(int multiplier) {
         return new Dollar(amount * multiplier);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Dollar dollar = (Dollar) obj;
+        return amount == dollar.amount;
     }
 }
