@@ -8,11 +8,8 @@ public class MoneyTest {
     public void multiplicationTest() {
         Dollar five = new Dollar(5);
 
-        Dollar product = five.times(2);
-        assertThat(product.amount).isEqualTo(10);
-
-        product = five.times(3);
-        assertThat(product.amount).isEqualTo(15);
+        assertThat(new Dollar(10)).isEqualTo(five.times(2));
+        assertThat(new Dollar(15)).isEqualTo(five.times(3));
     }
 
     @Test
@@ -27,7 +24,7 @@ public class MoneyTest {
 
 class Dollar {
 
-    int amount;
+    private int amount;
 
     Dollar(int amount) {
         this.amount = amount;
