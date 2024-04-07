@@ -6,16 +6,14 @@ public class MoneyTest {
 
     @Test
     public void multiplicationTest() {
-        //given
         Dollar five = new Dollar(5);
 
-        //when
-        five.times(2);
+        Dollar product = five.times(2);
+        assertThat(product.amount).isEqualTo(10);
 
-        //then
-        assertThat(five.amount).isEqualTo(10);
+        product = five.times(3);
+        assertThat(product.amount).isEqualTo(15);
     }
-
 }
 
 class Dollar {
@@ -26,7 +24,7 @@ class Dollar {
         this.amount = amount;
     }
 
-    void times(int multiplier) {
-        amount *= multiplier;
+    Dollar times(int multiplier) {
+        return new Dollar(amount * multiplier);
     }
 }
