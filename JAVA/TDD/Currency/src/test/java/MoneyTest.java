@@ -20,6 +20,14 @@ public class MoneyTest {
         assertThat(new Dollar(5)).isNotEqualTo(new Dollar(6));
         assertThat(new Dollar(5).equals(new Dollar(6))).isFalse();
     }
+
+    @Test
+    public void francMultiplicationTest() {
+        Franc five = new Franc(5);
+
+        assertThat(new Franc(10)).isEqualTo(five.times(2));
+        assertThat(new Franc(15)).isEqualTo(five.times(3));
+    }
 }
 
 class Dollar {
@@ -40,3 +48,23 @@ class Dollar {
         return amount == dollar.amount;
     }
 }
+
+class Franc {
+
+    private int amount;
+
+    Franc(int amount) {
+        this.amount = amount;
+    }
+
+    Franc times(int multiplier) {
+        return new Franc(amount * multiplier);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Franc franc = (Franc) obj;
+        return amount == franc.amount;
+    }
+}
+
