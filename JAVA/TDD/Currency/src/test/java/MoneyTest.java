@@ -28,20 +28,36 @@ public class MoneyTest {
         assertThat(Money.franc(10)).isEqualTo(five.times(2));
         assertThat(Money.franc(15)).isEqualTo(five.times(3));
     }
+
+    @Test
+    public void currencyTest() {
+        assertThat(Money.dollar(1).currency()).isEqualTo("USD");
+        assertThat(Money.franc(1).currency()).isEqualTo("CHF");
+    }
 }
 
 abstract class Money {
 
     protected int amount;
+    protected String currency;
+
+    Money(int amount, String currency) {
+        this.amount = amount;
+        this.currency = currency;
+    }
 
     abstract Money times(int multiplier);
 
+    String currency() {
+        return currency;
+    }
+
     static Money dollar(int amount) {
-        return new Dollar(amount);
+        return new Dollar(amount, "USD");
     }
 
     static Money franc(int amount) {
-        return new Franc(amount);
+        return new Franc(amount, "CHF");
     }
 
     @Override
@@ -54,23 +70,23 @@ abstract class Money {
 
 class Dollar extends Money {
 
-    Dollar(int amount) {
-        this.amount = amount;
+    Dollar(int amount, String currency) {
+        super(amount, currency);
     }
 
     Money times(int multiplier) {
-        return new Dollar(amount * multiplier);
+        return Money.dollar(amount * multiplier);
     }
 }
 
 class Franc extends Money {
 
-    Franc(int amount) {
-        this.amount = amount;
+    Franc(int amount, String currency) {
+        super(amount, currency);
     }
 
     Money times(int multiplier) {
-        return new Franc(amount * multiplier);
+        return Money.franc(amount * multiplier);
     }
 }
 
