@@ -24,9 +24,29 @@ public class MoneyTest {
         assertThat(Money.dollar(1).currency()).isEqualTo("USD");
         assertThat(Money.franc(1).currency()).isEqualTo("CHF");
     }
+
+    @Test
+    public void simpleAddition() {
+        Money five = Money.dollar(5);
+        Expression sum = five.plus(five);
+        Bank bank = new Bank();
+        Money reduced = bank.reduce(sum, "USD");
+        assertThat(reduced).isEqualTo(Money.dollar(10));
+    }
 }
 
-class Money {
+interface Expression {
+
+}
+
+class Bank {
+
+    Money reduce(Expression source, String to) {
+        return Money.dollar(10);// 가짜 구현
+    }
+}
+
+class Money implements Expression {
 
     protected int amount;
     protected String currency;
@@ -42,6 +62,10 @@ class Money {
 
     String currency() {
         return currency;
+    }
+
+    Expression plus(Money addend) {
+        return new Money(amount + addend.amount, currency);
     }
 
     static Money dollar(int amount) {
