@@ -8,8 +8,8 @@ public class MoneyTest {
     public void multiplicationTest() {
         Money five = Money.dollar(5);
 
-        assertThat(Money.dollar(10)).isEqualTo(five.times(2));
-        assertThat(Money.dollar(15)).isEqualTo(five.times(3));
+        assertThat(five.times(2)).isEqualTo(Money.dollar(10));
+        assertThat(five.times(3)).isEqualTo(Money.dollar(15));
     }
 
     @Test
@@ -25,8 +25,8 @@ public class MoneyTest {
     public void francMultiplicationTest() {
         Money five = Money.franc(5);
 
-        assertThat(Money.franc(10)).isEqualTo(five.times(2));
-        assertThat(Money.franc(15)).isEqualTo(five.times(3));
+        assertThat(five.times(2)).isEqualTo(Money.franc(10));
+        assertThat(five.times(3)).isEqualTo(Money.franc(15));
     }
 
     @Test
@@ -34,9 +34,15 @@ public class MoneyTest {
         assertThat(Money.dollar(1).currency()).isEqualTo("USD");
         assertThat(Money.franc(1).currency()).isEqualTo("CHF");
     }
+
+    @Test
+    public void differentClassEquality() {
+        assertThat(new Franc(10, "CHF")).isEqualTo(new Money(10, "CHF"));
+        assertThat(new Dollar(10, "USD")).isEqualTo(new Money(10, "USD"));
+    }
 }
 
-abstract class Money {
+class Money {
 
     protected int amount;
     protected String currency;
@@ -46,7 +52,9 @@ abstract class Money {
         this.currency = currency;
     }
 
-    abstract Money times(int multiplier);
+    Money times(int multiplier) {
+        return new Money(amount * multiplier, currency);
+    }
 
     String currency() {
         return currency;
@@ -64,7 +72,12 @@ abstract class Money {
     public boolean equals(Object obj) {
         Money money = (Money) obj;
         return amount == money.amount
-            && getClass().equals(money.getClass());
+            && currency().equals(money.currency());
+    }
+
+    @Override
+    public String toString() {
+        return amount + " " + currency;
     }
 }
 
@@ -73,20 +86,12 @@ class Dollar extends Money {
     Dollar(int amount, String currency) {
         super(amount, currency);
     }
-
-    Money times(int multiplier) {
-        return Money.dollar(amount * multiplier);
-    }
 }
 
 class Franc extends Money {
 
     Franc(int amount, String currency) {
         super(amount, currency);
-    }
-
-    Money times(int multiplier) {
-        return Money.franc(amount * multiplier);
     }
 }
 
