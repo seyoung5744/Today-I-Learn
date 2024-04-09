@@ -82,27 +82,43 @@ public class MoneyTest {
     public void identityRate() {
         assertThat(new Bank().rate("USD", "USD")).isEqualTo(1);
     }
+
+    @Test
+    public void mixedAddition() {
+        Expression fiveBucks = Money.dollar(5);
+        Expression tenFrancs = Money.franc(10);
+        Bank bank = new Bank();
+        bank.addRate("CHF", "USD",  2);
+        Money result = bank.reduce(fiveBucks.plus(tenFrancs), "USD");
+        assertThat(result).isEqualTo(Money.dollar(10));
+    }
 }
 
 class Sum implements Expression {
 
-    Money augend;
-    Money addend;
+    Expression augend;
+    Expression addend;
 
-    Sum(Money augend, Money addend) {
+    Sum(Expression augend, Expression addend) {
         this.augend = augend;
         this.addend = addend;
     }
 
     public Money reduce(Bank bank, String to) {
-        int amount = augend.amount + addend.amount;
+        // int amount = augend.amount + addend.amount; -> 가산수와 피가산수의 amount를 그냥 더하기만 하고 있었다(축약 X)
+        int amount = augend.reduce(bank, to).amount + addend.reduce(bank, to).amount; // 제대로 reduce하여 amount를 낸다.
         return new Money(amount, to);
+    }
+
+    public Expression plus(Expression addend) {
+        return null; // 지금은 stub 구현해두고, 할일 목록에 적어둔다.
     }
 }
 
 interface Expression {
 
     Money reduce(Bank bank, String to);
+    Expression plus(Expression addend);
 }
 
 class Bank {
@@ -133,7 +149,7 @@ class Money implements Expression {
         this.currency = currency;
     }
 
-    Money times(int multiplier) {
+    Expression times(int multiplier) {
         return new Money(amount * multiplier, currency);
     }
 
@@ -141,7 +157,7 @@ class Money implements Expression {
         return currency;
     }
 
-    Expression plus(Money addend) {
+    public Expression plus(Expression addend) {
         return new Sum(this, addend);
     }
 
