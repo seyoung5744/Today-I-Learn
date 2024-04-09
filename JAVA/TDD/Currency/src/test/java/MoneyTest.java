@@ -1,5 +1,7 @@
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.HashMap;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class MoneyTest {
@@ -62,6 +64,24 @@ public class MoneyTest {
         Money result = bank.reduce(Money.dollar(1), "USD");
         assertThat(result).isEqualTo(Money.dollar(1));
     }
+
+    @Test
+    public void reduceMoneyDifferentCurrency() {
+        Bank bank = new Bank();
+        bank.addRate("CHF", "USD", 2); // 통화 변환 비율(환전율)을 설정한다
+        Money result = bank.reduce(Money.franc(2), "USD"); // 2프랑을 달러화하여 result에 저장한다
+        assertThat(result).isEqualTo(Money.dollar(1));
+    }
+
+    @Test
+    public void arrayEquals() {
+        Assertions.assertArrayEquals(new Object[]{"abc"}, new Object[]{"abc"});
+    }
+
+    @Test
+    public void identityRate() {
+        assertThat(new Bank().rate("USD", "USD")).isEqualTo(1);
+    }
 }
 
 class Sum implements Expression {
@@ -74,20 +94,32 @@ class Sum implements Expression {
         this.addend = addend;
     }
 
-    public Money reduce(String to) {
+    public Money reduce(Bank bank, String to) {
         int amount = augend.amount + addend.amount;
         return new Money(amount, to);
     }
 }
 
 interface Expression {
-    Money reduce(String to);
+
+    Money reduce(Bank bank, String to);
 }
 
 class Bank {
 
+    private HashMap rates = new HashMap();
+
     Money reduce(Expression source, String to) {
-        return source.reduce(to);
+        return source.reduce(this, to);
+    }
+
+    int rate(String from, String to) {
+        if(from.equals(to)) return 1;
+        return (Integer) rates.get(new Pair(from, to));
+    }
+
+    void addRate(String from, String to, int rate) {
+        rates.put(new Pair(from, to), rate);
     }
 }
 
@@ -113,8 +145,9 @@ class Money implements Expression {
         return new Sum(this, addend);
     }
 
-    public Money reduce(String to) {
-        return this;
+    public Money reduce(Bank bank, String to) {
+        int rate = bank.rate(currency, to);
+        return new Money(amount / rate, to);
     }
 
     static Money dollar(int amount) {
@@ -135,5 +168,25 @@ class Money implements Expression {
     @Override
     public String toString() {
         return amount + " " + currency;
+    }
+}
+
+class Pair {
+
+    private String from;
+    private String to;
+
+    public Pair(String from, String to) {
+        this.from = from;
+        this.to = to;
+    }
+
+    public boolean equals(Object obj) {
+        Pair pair = (Pair) obj;
+        return from.equals(pair.from) && to.equals(pair.to);
+    }
+
+    public int hashCode() {
+        return 0;
     }
 }
