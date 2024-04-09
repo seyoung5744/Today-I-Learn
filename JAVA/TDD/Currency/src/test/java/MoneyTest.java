@@ -88,10 +88,33 @@ public class MoneyTest {
         Expression fiveBucks = Money.dollar(5);
         Expression tenFrancs = Money.franc(10);
         Bank bank = new Bank();
-        bank.addRate("CHF", "USD",  2);
+        bank.addRate("CHF", "USD", 2);
         Money result = bank.reduce(fiveBucks.plus(tenFrancs), "USD");
         assertThat(result).isEqualTo(Money.dollar(10));
     }
+
+    @Test
+    public void sumPlusMoney() {
+        Expression fiveBucks = Money.dollar(5);
+        Expression tenFrancs = Money.franc(10);
+        Bank bank = new Bank();
+        bank.addRate("CHF", "USD", 2);
+        Expression sum = new Sum(fiveBucks, tenFrancs).plus(fiveBucks);
+        Money result = bank.reduce(sum, "USD");
+        assertThat(result).isEqualTo(Money.dollar(15));
+    }
+
+    @Test
+    public void sumTimes() {
+        Expression fiveBucks = Money.dollar(5);
+        Expression tenFrancs = Money.franc(10);
+        Bank bank = new Bank();
+        bank.addRate("CHF", "USD", 2);
+        Expression sum = new Sum(fiveBucks, tenFrancs).times(2);
+        Money result = bank.reduce(sum, "USD");
+        assertThat(result).isEqualTo(Money.dollar(20));
+    }
+
 }
 
 class Sum implements Expression {
@@ -110,15 +133,22 @@ class Sum implements Expression {
         return new Money(amount, to);
     }
 
+    public Expression times(int multiplier) {
+        return new Sum(augend.times(multiplier), addend.times(multiplier));
+    }
+
     public Expression plus(Expression addend) {
-        return null; // 지금은 stub 구현해두고, 할일 목록에 적어둔다.
+        return new Sum(this, addend);
     }
 }
 
 interface Expression {
 
     Money reduce(Bank bank, String to);
+
     Expression plus(Expression addend);
+
+    Expression times(int multiplier);
 }
 
 class Bank {
@@ -130,7 +160,9 @@ class Bank {
     }
 
     int rate(String from, String to) {
-        if(from.equals(to)) return 1;
+        if (from.equals(to)) {
+            return 1;
+        }
         return (Integer) rates.get(new Pair(from, to));
     }
 
@@ -149,7 +181,7 @@ class Money implements Expression {
         this.currency = currency;
     }
 
-    Expression times(int multiplier) {
+    public Expression times(int multiplier) {
         return new Money(amount * multiplier, currency);
     }
 
