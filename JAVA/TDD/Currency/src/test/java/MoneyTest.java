@@ -33,16 +33,61 @@ public class MoneyTest {
         Money reduced = bank.reduce(sum, "USD");
         assertThat(reduced).isEqualTo(Money.dollar(10));
     }
+
+    @Test
+    public void plusReturnsSum() {
+        Money five = Money.dollar(5);
+        Expression result = five.plus(five);
+        Sum sum = (Sum) result;
+        assertThat(sum.augend).isEqualTo(five);
+        assertThat(sum.addend).isEqualTo(five);
+    }
+
+    @Test
+    public void reduceSum() {
+        // 만약 sum 이 가지고 있는 Money 통화가 모두 동일하고
+        Expression sum = new Sum(Money.dollar(3), Money.dollar(4));
+
+        // reduce를 통해 얻고자하는 Money 의 통화 역시 동일하다면
+        Bank bank = new Bank();
+        Money result = bank.reduce(sum, "USD");
+
+        // 결과는 sum 내에 있는 Money 들의 amount 를 합친 값을 갖는 Money 객체여야 한다.
+        assertThat(result).isEqualTo(Money.dollar(7));
+    }
+
+    @Test
+    public void reduceMoney() {
+        Bank bank = new Bank();
+        Money result = bank.reduce(Money.dollar(1), "USD");
+        assertThat(result).isEqualTo(Money.dollar(1));
+    }
+}
+
+class Sum implements Expression {
+
+    Money augend;
+    Money addend;
+
+    Sum(Money augend, Money addend) {
+        this.augend = augend;
+        this.addend = addend;
+    }
+
+    public Money reduce(String to) {
+        int amount = augend.amount + addend.amount;
+        return new Money(amount, to);
+    }
 }
 
 interface Expression {
-
+    Money reduce(String to);
 }
 
 class Bank {
 
     Money reduce(Expression source, String to) {
-        return Money.dollar(10);// 가짜 구현
+        return source.reduce(to);
     }
 }
 
@@ -65,7 +110,11 @@ class Money implements Expression {
     }
 
     Expression plus(Money addend) {
-        return new Money(amount + addend.amount, currency);
+        return new Sum(this, addend);
+    }
+
+    public Money reduce(String to) {
+        return this;
     }
 
     static Money dollar(int amount) {
