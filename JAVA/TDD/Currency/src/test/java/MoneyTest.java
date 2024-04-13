@@ -137,23 +137,25 @@ class Sum implements Expression {
         return new Sum(augend.times(multiplier), addend.times(multiplier));
     }
 
-    public Expression plus(Expression addend) {
-        return new Sum(this, addend);
-    }
+//    public Expression plus(Expression addend) {
+//        return new Sum(this, addend);
+//    }
 }
 
 interface Expression {
 
     Money reduce(Bank bank, String to);
 
-    Expression plus(Expression addend);
-
+    // Expression plus(Expression addend);
+    default Expression plus(Expression addend) {
+        return new Sum(this, addend);
+    }
     Expression times(int multiplier);
 }
 
 class Bank {
 
-    private HashMap rates = new HashMap();
+    private final HashMap<Pair, Integer> rates = new HashMap<>();
 
     Money reduce(Expression source, String to) {
         return source.reduce(this, to);
@@ -189,9 +191,9 @@ class Money implements Expression {
         return currency;
     }
 
-    public Expression plus(Expression addend) {
-        return new Sum(this, addend);
-    }
+//    public Expression plus(Expression addend) {
+//        return new Sum(this, addend);
+//    }
 
     public Money reduce(Bank bank, String to) {
         int rate = bank.rate(currency, to);
