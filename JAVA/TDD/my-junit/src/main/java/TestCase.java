@@ -1,4 +1,3 @@
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,7 @@ public abstract class TestCase {
     public void run() { // 템플릿 메소드
         setUp();
         runTestCase();
+        tearDown();
     }
 
     public void setUp() {} // setUp 메소드 추가
@@ -25,8 +25,10 @@ public abstract class TestCase {
             logger.info("{} execute ", name);
             Method method = getClass().getMethod(name);
             method.invoke(this);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    public void tearDown() {}
 }
