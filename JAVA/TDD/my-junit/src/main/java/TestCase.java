@@ -16,20 +16,20 @@ public abstract class TestCase {
         TestResult result = new TestResult();
         result.testStarted();
         setUp();
-        runTestCase();
+        runTestCase(result);
         tearDown();
         return result;
     }
 
     public void setUp() {} // setUp 메소드 추가
 
-    public void runTestCase() {
+    public void runTestCase(TestResult testResult) {
         try {
             logger.info("{} execute ", name);
             Method method = getClass().getMethod(name);
             method.invoke(this);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            testResult.testFailed();
         }
     }
 
