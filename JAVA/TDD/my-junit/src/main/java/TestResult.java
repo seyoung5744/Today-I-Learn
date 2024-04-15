@@ -12,6 +12,7 @@ public class TestResult {
     }
 
     public String getSummary() {
-        return String.format("%d run, %d failed", runCount, failCount);
+//        return String.format("%d run, %d failed", runCount, failCount);
+        return runCount + " run, " + failCount + " failed";
     }
 }

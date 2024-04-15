@@ -1,10 +1,6 @@
 import java.lang.reflect.Method;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class TestCase {
-
-    private static final Logger logger = LoggerFactory.getLogger(TestCase.class);
 
     protected final String name;
 
@@ -12,20 +8,17 @@ public abstract class TestCase {
         this.name = name;
     }
 
-    public TestResult run() { // 템플릿 메소드
-        TestResult result = new TestResult();
-        result.testStarted();
+    public void run(TestResult testResult) {
+        testResult.testStarted();
         setUp();
-        runTestCase(result);
+        runTestCase(testResult);
         tearDown();
-        return result;
     }
 
     public void setUp() {} // setUp 메소드 추가
 
     public void runTestCase(TestResult testResult) {
         try {
-            logger.info("{} execute ", name);
             Method method = getClass().getMethod(name);
             method.invoke(this);
         } catch (Exception e) {
