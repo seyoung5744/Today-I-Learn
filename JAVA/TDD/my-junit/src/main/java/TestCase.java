@@ -12,10 +12,13 @@ public abstract class TestCase {
         this.name = name;
     }
 
-    public void run() { // 템플릿 메소드
+    public TestResult run() { // 템플릿 메소드
+        TestResult result = new TestResult();
+        result.testStarted();
         setUp();
         runTestCase();
         tearDown();
+        return result;
     }
 
     public void setUp() {} // setUp 메소드 추가
