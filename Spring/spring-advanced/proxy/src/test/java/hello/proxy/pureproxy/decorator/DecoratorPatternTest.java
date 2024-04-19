@@ -1,6 +1,7 @@
 package hello.proxy.pureproxy.decorator;
 
 import hello.proxy.pureproxy.decorator.code.Component;
+import hello.proxy.pureproxy.decorator.code.Decorator;
 import hello.proxy.pureproxy.decorator.code.DecoratorPatternClient;
 import hello.proxy.pureproxy.decorator.code.MessageDecorator;
 import hello.proxy.pureproxy.decorator.code.RealComponent;
