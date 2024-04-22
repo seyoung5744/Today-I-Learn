@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import hello.aop.member.MemberService;
 import hello.aop.member.MemberServiceImpl;
+import hello.aop.proxyvs.code.ProxyDIAspect;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.framework.ProxyFactory;
