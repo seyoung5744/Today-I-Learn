@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9b753721-4bc8-444a-9ba0-34e9ffeffc9c" name="Changes" comment="" />
+    <list default="true" id="9b753721-4bc8-444a-9ba0-34e9ffeffc9c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,6 +35,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "spring.configuration.checksum": "1101a07502db8a9028f5e1d12d5bdff9",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -45,6 +48,7 @@
       <option name="presentableId" value="Default" />
       <updated>1722686095610</updated>
       <workItem from="1722686096714" duration="948000" />
+      <workItem from="1722743764313" duration="1087000" />
     </task>
     <servers />
   </component>
