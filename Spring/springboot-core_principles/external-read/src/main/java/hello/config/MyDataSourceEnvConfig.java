@@ -1,5 +1,6 @@
-package hello.datasource;
+package hello.config;
 
+import hello.datasource.MyDataSource;
 import java.time.Duration;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class MyDataSourceEnvConfig {
         int maxConnection = env.getProperty("my.datasource.etc.max-connection", Integer.class);
         Duration timeout = env.getProperty("my.datasource.etc.timeout", Duration.class);
         List<String> options = env.getProperty("my.datasource.etc.options", List.class);
-        
+
         return new MyDataSource(url, username, password, maxConnection, timeout, options);
     }
 
