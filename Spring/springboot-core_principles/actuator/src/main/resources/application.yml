@@ -4,7 +4,21 @@ management:
       enabled: true
     health:
       show-details: always
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+    env:
+      enabled: true
+    git:
+      mode: full
   endpoints:
     web:
       exposure:
         include: "*"
+
+info:
+  app:
+    name: hello-actuator
+    company: yh
