@@ -18,6 +18,10 @@ management:
       exposure:
         include: "*"
 
+logging:
+  level:
+    hello.controller: debug
+
 info:
   app:
     name: hello-actuator
