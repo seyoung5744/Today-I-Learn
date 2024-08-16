@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/actuator.iml" filepath="$PROJECT_DIR$/.idea/modules/actuator.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/actuator.main.iml" filepath="$PROJECT_DIR$/.idea/modules/actuator.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/actuator.test.iml" filepath="$PROJECT_DIR$/.idea/modules/actuator.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hello.actuator.main.iml" filepath="$PROJECT_DIR$/.idea/modules/hello.actuator.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hello.actuator.test.iml" filepath="$PROJECT_DIR$/.idea/modules/hello.actuator.test.iml" />
     </modules>
   </component>
 </project>
