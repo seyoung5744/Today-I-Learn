@@ -50,3 +50,12 @@ spring:
   sql:
     init:
       mode: never
+
+logging:
+  level:
+    org:
+      springframework:
+        test:
+          context:
+            transaction: trace
+
