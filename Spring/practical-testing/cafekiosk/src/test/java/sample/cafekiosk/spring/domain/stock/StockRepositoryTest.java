@@ -2,22 +2,16 @@ package sample.cafekiosk.spring.domain.stock;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.HOLD;
-import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
-import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.STOP_SELLING;
-import static sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
-import sample.cafekiosk.spring.domain.product.Product;
+import org.springframework.transaction.annotation.Transactional;
+import sample.cafekiosk.spring.IntegrationTestSupport;
 
-@ActiveProfiles("test")
-@DataJpaTest
-class StockRepositoryTest {
+@Transactional
+class StockRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private StockRepository stockRepository;
@@ -30,7 +24,7 @@ class StockRepositoryTest {
         Stock stock2 = Stock.create("002", 2);
         Stock stock3 = Stock.create("003", 3);
         stockRepository.saveAll(List.of(stock1, stock2, stock3));
-        
+
         //when
         List<Stock> stocks = stockRepository.findAllByProductNumberIn(List.of("001", "002"));
 
