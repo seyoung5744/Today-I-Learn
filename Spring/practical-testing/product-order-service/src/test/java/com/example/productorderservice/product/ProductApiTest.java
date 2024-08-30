@@ -9,36 +9,34 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 public class ProductApiTest extends ApiTest {
 
     @DisplayName("상품 등록")
     @Test
     void addProduct() {
-        final var request = createAddProductRequest();
+        final var request = ProductSteps.createAddProductRequest();
 
         // API 요청
-        final var response = requestAddProduct(request);
+        final var response = ProductSteps.requestAddProduct(request);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 
-    private static ExtractableResponse<Response> requestAddProduct(AddProductRequest request) {
-        return RestAssured.given().log().all()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .body(request)
+    @DisplayName("상품 조회")
+    @Test
+    void getProduct() {
+        final var request = ProductSteps.createAddProductRequest();
+        ProductSteps.requestAddProduct(request);
+        Long productId = 1L;
+
+        final ExtractableResponse<Response> response = RestAssured.given().log().all()
             .when()
-            .post("/products")
-            .then()
-            .log().all().extract();
-    }
+            .get("/products/{productId}", productId)
+            .then().log().all()
+            .extract();
 
-    private static AddProductRequest createAddProductRequest() {
-        final String name = "상품명";
-        final int price = 1000;
-        final DiscountPolicy discountPolicy = DiscountPolicy.NONE;
-        return new AddProductRequest(name, price, discountPolicy);
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getString("name")).isEqualTo("상품명");
     }
-
 }
