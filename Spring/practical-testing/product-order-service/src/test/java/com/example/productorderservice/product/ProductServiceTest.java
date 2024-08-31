@@ -1,59 +1,36 @@
 package com.example.productorderservice.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class ProductServiceTest {
 
-
+    @Autowired
     private ProductService productService;
-
-    private ProductPort productPort;
-
-    @BeforeEach
-    void setUp() {
-        productPort = Mockito.mock(ProductPort.class);
-        productService = new ProductService(productPort);
-    }
 
     @DisplayName("상품 수정")
     @Test
     void updateProduct() {
         // given
+        productService.addProduct(ProductSteps.createAddProductRequest());
         final Long productId = 1L;
         final UpdateProductRequest request = new UpdateProductRequest("상품 수정", 2000, DiscountPolicy.NONE);
-        final Product product = new Product("상품명", 1000, DiscountPolicy.NONE);
-
-        given(productPort.getProduct(productId)).willReturn(product);
 
         // when
         productService.updateProduct(productId, request);
 
         // then
-        assertThat(product.getName()).isEqualTo("상품 수정");
-        assertThat(product.getPrice()).isEqualTo(2000);
+        final ResponseEntity<GetProductResponse> response = productService.getProduct(productId);
+        final GetProductResponse productResponse = response.getBody();
+
+        assertThat(productResponse.name()).isEqualTo("상품 수정");
+        assertThat(productResponse.price()).isEqualTo(2000);
     }
-//
-//    private static class StubProductPort implements ProductPort {
-//
-//        public Product getProduct_will_return;
-//
-//        @Override
-//        public void save(Product product) {
-//
-//        }
-//
-//        @Override
-//        public Product getProduct(Long productId) {
-//            return getProduct_will_return;
-//        }
-//    }
+
 }
