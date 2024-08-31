@@ -3,7 +3,6 @@ package com.example.productorderservice.product;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.productorderservice.ApiTest;
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
@@ -30,13 +29,10 @@ public class ProductApiTest extends ApiTest {
         ProductSteps.requestAddProduct(request);
         Long productId = 1L;
 
-        final ExtractableResponse<Response> response = RestAssured.given().log().all()
-            .when()
-            .get("/products/{productId}", productId)
-            .then().log().all()
-            .extract();
+        final ExtractableResponse<Response> response = ProductSteps.getProductRequest(productId);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getString("name")).isEqualTo("상품명");
     }
+
 }
