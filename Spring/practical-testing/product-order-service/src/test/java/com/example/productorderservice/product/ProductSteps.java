@@ -23,4 +23,26 @@ public class ProductSteps {
         final DiscountPolicy discountPolicy = DiscountPolicy.NONE;
         return new AddProductRequest(name, price, discountPolicy);
     }
+
+    public static ExtractableResponse<Response> getProductRequest(Long productId) {
+        return RestAssured.given().log().all()
+            .when()
+            .get("/products/{productId}", productId)
+            .then().log().all()
+            .extract();
+    }
+
+    public static UpdateProductRequest createUpdateProductRequest() {
+        return new UpdateProductRequest("상품 수정", 2000, DiscountPolicy.NONE);
+    }
+
+    public static ExtractableResponse<Response> updateProductRequest(final long productId) {
+        return RestAssured.given().log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(createUpdateProductRequest())
+            .when()
+            .patch("/products/{productId}", productId)
+            .then().log().all()
+            .extract();
+    }
 }
