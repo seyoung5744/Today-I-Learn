@@ -1,6 +1,6 @@
-package com.example.productorderservice.order;
+package com.example.productorderservice.order.domain;
 
-import com.example.productorderservice.product.Product;
+import com.example.productorderservice.product.domain.Product;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
