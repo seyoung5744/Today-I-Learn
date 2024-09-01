@@ -1,6 +1,6 @@
-package com.example.productorderservice.payment;
+package com.example.productorderservice.payment.domain;
 
-import com.example.productorderservice.order.Order;
+import com.example.productorderservice.order.domain.Order;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class Payment {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,9 @@ package com.example.productorderservice.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.productorderservice.product.application.service.GetProductResponse;
+import com.example.productorderservice.product.application.service.ProductService;
+import com.example.productorderservice.product.application.service.UpdateProductRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
