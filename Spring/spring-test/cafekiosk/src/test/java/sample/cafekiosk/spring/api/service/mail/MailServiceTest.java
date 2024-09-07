@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -14,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import sample.cafekiosk.spring.client.mail.MailSendClient;
 import sample.cafekiosk.spring.domain.history.mail.MailSendHistory;
@@ -23,8 +20,7 @@ import sample.cafekiosk.spring.domain.history.mail.MailSendHistoryRepository;
 @ExtendWith(MockitoExtension.class)
 class MailServiceTest {
 
-//    @Mock
-    @Spy
+    @Mock
     private MailSendClient mailSendClient;
 
     @Mock
@@ -37,17 +33,14 @@ class MailServiceTest {
     @Test
     void sendMail() {
         // given
-//        MailSendClient mailSendClient = mock(MailSendClient.class);
-//        MailSendHistoryRepository mailSendHistoryRepository = mock(MailSendHistoryRepository.class);
+//        Mockito.when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+//            .thenReturn(true);
+        given(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+            .willReturn(true);
 
-//        MailService mailService = new MailService(mailSendClient, mailSendHistoryRepository);
-
-//        given(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
-//            .willReturn(true);
-
-        willReturn(true)
-            .given(mailSendClient)
-            .sendEmail(anyString(), anyString(), anyString(), anyString());
+//        willReturn(true)
+//            .given(mailSendClient)
+//            .sendEmail(anyString(), anyString(), anyString(), anyString());
 
         // when
         boolean result = mailService.sendMail("", "", "", "");
