@@ -1,6 +1,8 @@
 package zerobase.weather.service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import zerobase.weather.client.WeatherClient;
@@ -25,4 +27,21 @@ public class DiaryService {
     }
 
 
+    public List<DiaryResponse> readDiary(LocalDate date) {
+        List<Diary> diaries = diaryRepository.findAllByDate(date);
+        return diaries.stream()
+            .map(DiaryResponse::of)
+            .collect(Collectors.toList());
+    }
+
+    public List<DiaryResponse> readDiaries(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("날짜 입력이 잘못되었습니다.");
+        }
+
+        List<Diary> diaries = diaryRepository.findAllByDateBetween(startDate, endDate);
+        return diaries.stream()
+            .map(DiaryResponse::of)
+            .collect(Collectors.toList());
+    }
 }
