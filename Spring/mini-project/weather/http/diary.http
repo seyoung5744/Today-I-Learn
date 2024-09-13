@@ -1,15 +1,23 @@
 ### 일기 저장
-POST localhost:8080/api/v1/diary?date=2024-07-23
+POST localhost:8080/api/v1/diary?date=2024-07-20
 Content-Type: application/json
 
 {
-  "text": "content"
+  "text": "content1"
 }
 
 ### 해당 날짜 일기 전체 조회
-GET localhost:8080/api/v1/diary?date=2024-07-19
+GET localhost:8080/api/v1/diary?date=2024-07-20
 Accept: application/json
 
 ### 날짜 구간 일기 조회
 GET localhost:8080/api/v1/diaries?startDate=2024-07-22&endDate=2024-07-21
 Accept: application/json
+
+### 일기 수정
+PATCH localhost:8080/api/v1/diary?date=2024-07-20
+Content-Type: application/json
+
+{
+  "text": "수정수정2"
+}

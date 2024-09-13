@@ -5,14 +5,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import zerobase.weather.client.WeatherClient;
 import zerobase.weather.client.dto.Weather;
 import zerobase.weather.controller.request.CreateDiaryRequest;
+import zerobase.weather.controller.request.EditDiaryRequest;
 import zerobase.weather.domain.Diary;
 import zerobase.weather.repository.DiaryRepository;
 import zerobase.weather.service.response.DiaryResponse;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DiaryService {
 
@@ -43,5 +46,15 @@ public class DiaryService {
         return diaries.stream()
             .map(DiaryResponse::of)
             .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public DiaryResponse updateDiary(LocalDate date, EditDiaryRequest request) {
+        Diary diary = diaryRepository.findFirstByDate(date)
+            .orElseThrow(() -> new IllegalArgumentException(date + " 일기가 존재하지 않습니다."));
+
+        diary.editText(request.getText());
+
+        return DiaryResponse.of(diary);
     }
 }

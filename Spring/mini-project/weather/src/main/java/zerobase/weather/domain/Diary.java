@@ -43,4 +43,8 @@ public class Diary {
             .date(date)
             .build();
     }
+
+    public void editText(String text) {
+        this.text = text;
+    }
 }

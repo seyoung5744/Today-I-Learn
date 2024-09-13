@@ -6,11 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import zerobase.weather.controller.request.CreateDiaryRequest;
+import zerobase.weather.controller.request.EditDiaryRequest;
 import zerobase.weather.service.DiaryService;
 import zerobase.weather.service.response.DiaryResponse;
 
@@ -37,5 +39,10 @@ public class DiaryController {
         @RequestParam("endDate") @DateTimeFormat(iso = ISO.DATE) LocalDate endDate
     ) {
         return diaryService.readDiaries(startDate, endDate);
+    }
+
+    @PatchMapping("/api/v1/diary")
+    public DiaryResponse updateDiary(@RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date, @RequestBody EditDiaryRequest request) {
+        return diaryService.updateDiary(date, request);
     }
 }
