@@ -12,6 +12,9 @@ spring:
     hibernate:
       ddl-auto: none
 
+openweathermap:
+  key: ${secretKey}
+
 ---
 spring:
   config:
