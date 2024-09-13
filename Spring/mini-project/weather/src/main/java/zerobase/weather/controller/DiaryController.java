@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,5 +45,10 @@ public class DiaryController {
     @PatchMapping("/api/v1/diary")
     public DiaryResponse updateDiary(@RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date, @RequestBody EditDiaryRequest request) {
         return diaryService.updateDiary(date, request);
+    }
+
+    @DeleteMapping("/api/v1/diary")
+    public void deleteDiary(@RequestParam("date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
+        diaryService.deleteDiary(date);
     }
 }

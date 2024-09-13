@@ -57,4 +57,9 @@ public class DiaryService {
 
         return DiaryResponse.of(diary);
     }
+
+    @Transactional
+    public void deleteDiary(LocalDate date) {
+        diaryRepository.deleteAllByDate(date);
+    }
 }
