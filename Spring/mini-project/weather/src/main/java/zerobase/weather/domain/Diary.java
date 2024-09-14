@@ -34,13 +34,13 @@ public class Diary {
         this.date = date;
     }
 
-    public static Diary create(String weather, String icon, double temperature, String text, LocalDate date) {
+    public static Diary create(DateWeather dateWeather, String text) {
         return Diary.builder()
-            .weather(weather)
-            .icon(icon)
-            .temperature(temperature)
+            .weather(dateWeather.getWeather())
+            .icon(dateWeather.getIcon())
+            .temperature(dateWeather.getTemperature())
             .text(text)
-            .date(date)
+            .date(dateWeather.getDate())
             .build();
     }
 
