@@ -11,6 +11,7 @@ import zerobase.weather.controller.request.CreateDiaryRequest;
 import zerobase.weather.controller.request.EditDiaryRequest;
 import zerobase.weather.domain.DateWeather;
 import zerobase.weather.domain.Diary;
+import zerobase.weather.exception.InvalidDate;
 import zerobase.weather.repository.DiaryRepository;
 import zerobase.weather.service.response.DiaryResponse;
 
@@ -41,9 +42,9 @@ public class DiaryService {
     }
 
     public List<DiaryResponse> readDiaries(LocalDate startDate, LocalDate endDate) {
-        if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("날짜 입력이 잘못되었습니다.");
-        }
+//        if (startDate.isAfter(endDate)) {
+//            throw new InvalidDate();
+//        }
 
         List<Diary> diaries = diaryRepository.findAllByDateBetween(startDate, endDate);
         return diaries.stream()
