@@ -1,5 +1,7 @@
 package zerobase.weather.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +36,10 @@ public class DiaryController {
         return diaryService.readDiary(date);
     }
 
+    @Operation(summary = "날짜 읽기")
     @GetMapping("/api/v1/diaries")
     public List<DiaryResponse> readDiaries(
-        @RequestParam("startDate") @DateTimeFormat(iso = ISO.DATE) LocalDate startDate,
+        @Parameter(description = "날짜 형식 : yyyy-MM-dd") @RequestParam("startDate") @DateTimeFormat(iso = ISO.DATE) LocalDate startDate,
         @RequestParam("endDate") @DateTimeFormat(iso = ISO.DATE) LocalDate endDate
     ) {
         return diaryService.readDiaries(startDate, endDate);
