@@ -1,0 +1,7 @@
+### 회사 저장
+POST http://localhost:8080/company
+Content-Type: application/json
+
+{
+  "ticker": "MMM"
+}

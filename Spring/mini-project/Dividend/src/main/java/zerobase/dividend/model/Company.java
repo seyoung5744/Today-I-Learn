@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import zerobase.dividend.persist.domain.CompanyEntity;
 
 @ToString
 @Getter
@@ -18,5 +19,12 @@ public class Company {
     private Company(String ticker, String name) {
         this.ticker = ticker;
         this.name = name;
+    }
+
+    public CompanyEntity toEntity() {
+        return CompanyEntity.builder()
+            .ticker(this.ticker)
+            .name(this.name)
+            .build();
     }
 }

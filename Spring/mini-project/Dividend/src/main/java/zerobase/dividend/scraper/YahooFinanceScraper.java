@@ -9,11 +9,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 import zerobase.dividend.model.Company;
 import zerobase.dividend.model.Dividend;
 import zerobase.dividend.model.ScrapeResult;
 import zerobase.dividend.model.constants.Month;
 
+@Component
 public class YahooFinanceScraper implements Scraper {
 
     private static final String STATISTICS_URL = "https://finance.yahoo.com/quote/%s/history/?frequency=1mo&period1=%d&period2=%d&filter=div";
@@ -38,7 +40,7 @@ public class YahooFinanceScraper implements Scraper {
             throw new RuntimeException(e);
         }
     }
-    
+
     @Override
     public Company scrapeCompanyByTicker(String ticker) {
         try {
@@ -53,7 +55,7 @@ public class YahooFinanceScraper implements Scraper {
                 .build();
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("failed to scrap ticker -> " + ticker);
         }
     }
 
