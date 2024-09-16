@@ -1,6 +1,5 @@
 package zerobase.dividend.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
