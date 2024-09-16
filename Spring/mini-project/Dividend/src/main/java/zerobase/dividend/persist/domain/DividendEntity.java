@@ -1,25 +1,34 @@
 package zerobase.dividend.persist.domain;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "COMPANY")
+@Entity(name = "DIVIDEND")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Company {
+public class DividendEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String ticker;
+    private Long companyId;
 
-    private String name;
+    private LocalDateTime date;
+
+    private String dividend;
+
+    @Builder
+    private DividendEntity(Long companyId, LocalDateTime date, String dividend) {
+        this.companyId = companyId;
+        this.date = date;
+        this.dividend = dividend;
+    }
 }
