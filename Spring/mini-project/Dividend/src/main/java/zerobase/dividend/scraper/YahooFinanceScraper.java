@@ -14,11 +14,13 @@ import zerobase.dividend.model.Dividend;
 import zerobase.dividend.model.ScrapeResult;
 import zerobase.dividend.model.constants.Month;
 
-public class YahooFinanceScraper {
+public class YahooFinanceScraper implements Scraper {
 
     private static final String STATISTICS_URL = "https://finance.yahoo.com/quote/%s/history/?frequency=1mo&period1=%d&period2=%d&filter=div";
+    private static final String SUMMARY_URL = "https://finance.yahoo.com/quote/%s";
     private static final long START_TIME = 86400; // 60 * 60 * 24 = 60초 * 60분 * 24시간
 
+    @Override
     public ScrapeResult scrap(final Company company, long endTime) {
         try {
             final String url = String.format(STATISTICS_URL, company.getTicker(), START_TIME, endTime);
@@ -36,9 +38,23 @@ public class YahooFinanceScraper {
             throw new RuntimeException(e);
         }
     }
-
+    
+    @Override
     public Company scrapeCompanyByTicker(String ticker) {
-        return null;
+        try {
+            String url = String.format(SUMMARY_URL, ticker);
+            Document document = Jsoup.connect(url).get();
+            Element titleEle = document.getElementsByTag("h1").get(1);
+            String title = titleEle.text().split("\\(")[0].trim();
+
+            return Company.builder()
+                .ticker(ticker)
+                .name(title)
+                .build();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Element getElementBy(Document document) {
@@ -53,7 +69,7 @@ public class YahooFinanceScraper {
         int day = Integer.parseInt(splits[1].replace(",", ""));
         int year = Integer.parseInt(splits[2]);
         String dividend = splits[3];
-        
+
         return Dividend.builder()
             .date(LocalDateTime.of(year, month, day, 0, 0))
             .dividend(dividend)
