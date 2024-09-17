@@ -1,4 +1,4 @@
-### 회사 저장
+### 회사 추가
 POST http://localhost:8080/company
 Content-Type: application/json
 
@@ -8,4 +8,8 @@ Content-Type: application/json
 
 ### 배당금 조회
 GET http://localhost:8080/finance/dividend/test
+Accept: application/json
+
+### 자동완성
+GET http://localhost:8080/company/autocomplete?keyword=A
 Accept: application/json
