@@ -2,6 +2,8 @@ package zerobase.dividend.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import zerobase.dividend.model.Company;
 import zerobase.dividend.model.ScrapeResult;
@@ -24,6 +26,10 @@ public class CompanyService {
             throw new RuntimeException("already exists ticker -> " + ticker);
         }
         return storeCompanyAndDividend(ticker, endTime);
+    }
+
+    public Page<CompanyEntity> getAllCompany(Pageable pageable) {
+        return companyRepository.findAll(pageable);
     }
 
     private Company storeCompanyAndDividend(String ticker, long endTime) {
