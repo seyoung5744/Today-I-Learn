@@ -22,6 +22,13 @@ public class Dividend {
         this.dividend = dividend;
     }
 
+    public static Dividend of(DividendEntity dividendEntity) {
+        return Dividend.builder()
+            .date(dividendEntity.getDate())
+            .dividend(dividendEntity.getDividend())
+            .build();
+    }
+
     public DividendEntity toEntity(Long companyId) {
         return DividendEntity.builder()
             .companyId(companyId)

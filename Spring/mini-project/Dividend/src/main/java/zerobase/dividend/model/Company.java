@@ -21,6 +21,13 @@ public class Company {
         this.name = name;
     }
 
+    public static Company of(CompanyEntity companyEntity) {
+        return Company.builder()
+            .ticker(companyEntity.getTicker())
+            .name(companyEntity.getName())
+            .build();
+    }
+
     public CompanyEntity toEntity() {
         return CompanyEntity.builder()
             .ticker(this.ticker)

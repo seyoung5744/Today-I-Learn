@@ -5,3 +5,7 @@ Content-Type: application/json
 {
   "ticker": "MMM"
 }
+
+### 배당금 조회
+GET http://localhost:8080/finance/dividend/test
+Accept: application/json
