@@ -1,13 +1,14 @@
 package zerobase.dividend.scheduler;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import zerobase.dividend.model.Company;
 import zerobase.dividend.model.ScrapeResult;
+import zerobase.dividend.model.constants.CacheKey;
 import zerobase.dividend.persist.CompanyRepository;
 import zerobase.dividend.persist.DividendRepository;
 import zerobase.dividend.persist.domain.CompanyEntity;
@@ -22,29 +23,19 @@ public class ScraperScheduler {
     private final DividendRepository dividendRepository;
     private final Scraper scraper;
 
-    @Scheduled(fixedDelay = 1000)
-    public void test1() throws InterruptedException {
-        Thread.sleep(10000);
-        log.info(Thread.currentThread().getName() + " -> 테스트1 : " + LocalDateTime.now());
-    }
-
-    @Scheduled(fixedDelay = 1000)
-    public void test2() {
-        log.info(Thread.currentThread().getName() + " -> 테스트2 : " + LocalDateTime.now());
-    }
-
     // 일정 주기마다 수행
-//    @Scheduled(cron = "${scheduler.scrap.yahoo}")
-    public void yahooFinanceScheduling(long endTime) {
+    @CacheEvict(value = CacheKey.KEY_FINANCE, allEntries = true)
+    @Scheduled(cron = "${scheduler.scrap.yahoo}")
+    public void yahooFinanceScheduling() {
         log.info("scraping scheduler is started");
+
         // 저장된 회사 목록을 조회
         List<CompanyEntity> companies = companyRepository.findAll();
 
         // 회사마다 배당금 정보를 새로 스크래핑
-
         for (var company : companies) {
             log.info("scraping scheduler is started -> " + company.getName());
-            ScrapeResult scrapeResult = scraper.scrap(Company.of(company), endTime);
+            ScrapeResult scrapeResult = scraper.scrap(Company.of(company), System.currentTimeMillis() / 1000);
 
             // 스크래핑한 배당금 정보 중 DB에 없는 값은 저장
             scrapeResult.getDividends().stream()

@@ -7,7 +7,7 @@ Content-Type: application/json
 }
 
 ### 배당금 조회
-GET http://localhost:8080/finance/dividend/test
+GET http://localhost:8080/finance/dividend/3M Company
 Accept: application/json
 
 ### 자동완성
