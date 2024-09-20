@@ -32,6 +32,7 @@ public class AuthController {
         var member = memberService.authenticate(signIn);
         Date createDate = new Date();
         var token = tokenProvider.generateToken(member.getUsername(), member.getRoles(), createDate);
+        log.info("user login -> " + signIn.getUsername());
         return ResponseEntity.ok(token);
     }
 }
