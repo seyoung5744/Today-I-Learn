@@ -27,13 +27,16 @@ dependencies {
 	// spring boot
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	// h2
 	runtimeOnly 'com.h2database:h2'
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
 	// jsoup for scraping
 	implementation 'org.jsoup:jsoup:1.15.3'
