@@ -1,3 +1,4 @@
+
 spring:
   h2:
     console:
@@ -11,6 +12,9 @@ spring:
       ddl-auto: create
     show-sql: true
     defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
 
   datasource:
     driver-class-name: org.h2.Driver
