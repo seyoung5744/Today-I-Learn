@@ -73,4 +73,15 @@ public class CompanyService {
         dividendRepository.saveAll(dividendEntities);
         return company;
     }
+
+    public String deleteCompany(String ticker) {
+        var company = companyRepository.findByTicker(ticker)
+            .orElseThrow(() -> new RuntimeException("존재하지 않는 회사입니다."));
+
+        dividendRepository.deleteAllByCompanyId(company.getId());
+        companyRepository.delete(company);
+
+        deleteAutocompleteKeyword(company.getName());
+        return company.getName();
+    }
 }
