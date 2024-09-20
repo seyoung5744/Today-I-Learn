@@ -24,7 +24,8 @@ spring:
       port: 6379
 
   jwt:
-    secret: emVyb2Jhc2UuZGl2aWRlbmQucHJvamVjdC5qd3Quc2VjcmV0LmtleQo=
+    secret: MjAyNC0wOS0yMC1wcmFjdGljZS16ZXJvYmFzZS1kaXZpZGVuZC1wcm9qZWN0LWZvci1qd3Qtc2VjcmV0LWtleQo=
+
 
 scheduler:
   scrap:

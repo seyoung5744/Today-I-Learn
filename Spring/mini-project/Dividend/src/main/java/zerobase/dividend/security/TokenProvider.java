@@ -3,37 +3,50 @@ package zerobase.dividend.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import java.util.Date;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import zerobase.dividend.service.MemberService;
 
 @Component
-@RequiredArgsConstructor
 public class TokenProvider {
 
     private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1 hour
     private static final String KEY_ROLES = "roles";
 
-    @Value("${spring.jwt.secret}")
-    private String secretKey;
+    private final MemberService memberService;
+    private final SecretKey secretKey;
+
+    public TokenProvider(MemberService memberService, @Value("${spring.jwt.secret}") String secretKey) {
+        this.memberService = memberService;
+        this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secretKey));
+    }
 
     // 토큰 생성(발급)
     public String generateToken(String username, List<String> roles, Date createDate) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put(KEY_ROLES, roles);
 
         var expireDate = new Date(createDate.getTime() + TOKEN_EXPIRE_TIME);
 
         return Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(createDate) // 토큰 생성 시간
-            .setExpiration(expireDate) // 토큰 만료 시간
-            .signWith(SignatureAlgorithm.HS512, this.secretKey) // 사용할 암호화 알고리즘, 비밀키
+            .subject(username)
+            .claim(KEY_ROLES, roles)
+            .issuedAt(createDate) // 토큰 생성 시간
+            .expiration(expireDate) // 토큰 만료 시간
+            .signWith(secretKey, Jwts.SIG.HS512) // 사용할 암호화 알고리즘, 비밀키
             .compact();
+    }
+
+    public Authentication getAuthentication(String jwt) {
+        UserDetails userDetails = memberService.loadUserByUsername(getUsername(jwt));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     public String getUsername(String token) {
@@ -41,7 +54,7 @@ public class TokenProvider {
     }
 
     public boolean validateTokenWithNowDate(String token, Date now) {
-        if(hasNotText(token)) {
+        if (hasNotText(token)) {
             return false;
         }
 
@@ -52,7 +65,7 @@ public class TokenProvider {
 
     private Claims parseClaims(String token) {
         try {
-            return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
+            return Jwts.parser().verifyWith(this.secretKey).build().parseSignedClaims(token).getPayload();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
