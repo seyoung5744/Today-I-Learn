@@ -28,6 +28,9 @@ dependencies {
 	// webscoket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+	// stomp
+	implementation 'org.webjars:stomp-websocket:2.3.4'
+
 	// thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
