@@ -1,4 +1,4 @@
-package tutorial04;
+package sample01.tutorial05;
 
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
@@ -6,9 +6,9 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import java.nio.charset.StandardCharsets;
 
-public class PublishSeverity {
+public class TopicProducer {
 
-    private final static String EXCHANGE_NAME = "logs";
+    private final static String EXCHANGE_NAME = "topic_logs";
 
     public static void main(String[] args) throws Exception {
 
@@ -24,18 +24,18 @@ public class PublishSeverity {
             Channel channel = conn.createChannel()) {
 
             // Exchange Declare
-            channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.DIRECT);
+            channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.TOPIC);
 
-            String severity = getSeverity(args);
+            String routingKey = getRoutingKey(args);
             String message = getMessage(args);
             
-            channel.basicPublish(EXCHANGE_NAME, severity, null, message.getBytes(StandardCharsets.UTF_8));
-            System.out.println("[x] Sent = [" + severity + "] : " + message);
+            channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes(StandardCharsets.UTF_8));
+            System.out.println("[x] Sent = [" + routingKey + "] : " + message);
         }
     }
 
-    private static String getSeverity(String[] args) {
-        return args.length < 1? "info" : args[0];
+    private static String getRoutingKey(String[] strings) {
+        return strings.length < 1 ? "anonymous.info" : strings[0];
     }
 
     private static String getMessage(String[] args) {

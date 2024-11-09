@@ -1,4 +1,4 @@
-package tutorial06;
+package sample01.tutorial06;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;

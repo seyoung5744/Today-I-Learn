@@ -1,4 +1,4 @@
-package tutorial01;
+package sample02.tutorial01;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -8,7 +8,7 @@ public class Send {
 
     private final static String QUEUE_NAME = "hello";
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
 
         factory.setHost("localhost");
@@ -17,7 +17,7 @@ public class Send {
             Channel channel = conn.createChannel()) {
 
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-            String msg = "HELLO WORLD!!!";
+            String msg = "HELLO WORLD";
 
             channel.basicPublish("", QUEUE_NAME, null, msg.getBytes());
 

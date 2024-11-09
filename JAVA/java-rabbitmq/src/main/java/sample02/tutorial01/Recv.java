@@ -1,17 +1,15 @@
-package tutorial01;
+package sample02.tutorial01;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
-import java.nio.charset.StandardCharsets;
 
 public class Recv {
 
-    private final static String QUEUE_NAME = "hello";
+    public static final String QUEUE_NAME = "hello";
 
-    public static void main(String[] args) throws Exception{
-
+    public static void main(String[] args) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
 
@@ -20,11 +18,11 @@ public class Recv {
 
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
-        System.out.println("[*] Waiting for msgs. (Press CTRL + C to exit");
+        System.out.println("[*] Waiting for msgs. (Press CTRL + c to exit)");
 
         DeliverCallback callback = (consumerTag, delivery) -> {
-            String msg = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            System.out.println("[X] Received : " + msg);
+            String msg = new String(delivery.getBody(), "UTF-8");
+            System.out.println("[x] Received : " + msg);
         };
 
         /*
@@ -35,5 +33,4 @@ public class Recv {
         */
         channel.basicConsume(QUEUE_NAME, true, callback, consumerTag -> {});
     }
-
 }

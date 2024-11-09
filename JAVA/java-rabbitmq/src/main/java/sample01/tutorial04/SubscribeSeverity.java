@@ -1,4 +1,4 @@
-package tutorial04;
+package sample01.tutorial04;
 
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
