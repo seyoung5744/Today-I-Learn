@@ -1,1 +1,9 @@
-spring.application.name=spring-chatting
+#RabbitMQ
+server:
+  port: 8081
+spring:
+  rabbitmq:
+    username: guest
+    password: guest
+    host: localhost
+    port: 5672
