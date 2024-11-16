@@ -19,35 +19,49 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/chat")
 public class ChatRoomController {
 
-    private final ChatRoomRepository repository;
+//    private final ChatRoomRepository repository;
+//
+//    //채팅방 목록 조회
+//    @GetMapping("/rooms")
+//    public ModelAndView rooms() {
+//
+//        log.info("# All Chat Rooms");
+//        ModelAndView mv = new ModelAndView("chat/rooms");
+//
+//        mv.addObject("list", repository.findAllRooms());
+//
+//        return mv;
+//    }
+//
+//    //채팅방 개설
+//    @PostMapping("/room")
+//    public String create(@RequestParam String name, RedirectAttributes rttr) {
+//
+//        log.info("# Create Chat Room , name: " + name);
+//        rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(name));
+//        return "redirect:/chat/rooms";
+//    }
+//
+//    //채팅방 조회
+//    @GetMapping("/room")
+//    public void getRoom(String roomId, Model model) {
+//
+//        log.info("# get Chat Room, roomID : " + roomId);
+//
+//        model.addAttribute("room", repository.findRoomById(roomId));
+//    }
 
-    //채팅방 목록 조회
     @GetMapping("/rooms")
-    public ModelAndView rooms() {
-
-        log.info("# All Chat Rooms");
-        ModelAndView mv = new ModelAndView("chat/rooms");
-
-        mv.addObject("list", repository.findAllRooms());
-
-        return mv;
+    public String getRooms(){
+        return "chat/rooms";
     }
 
-    //채팅방 개설
-    @PostMapping("/room")
-    public String create(@RequestParam String name, RedirectAttributes rttr) {
+    @GetMapping(value = "/room")
+    public String getRoom(@RequestParam Long chatRoomId, @RequestParam String nickname, Model model){
 
-        log.info("# Create Chat Room , name: " + name);
-        rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(name));
-        return "redirect:/chat/rooms";
-    }
-
-    //채팅방 조회
-    @GetMapping("/room")
-    public void getRoom(String roomId, Model model) {
-
-        log.info("# get Chat Room, roomID : " + roomId);
-
-        model.addAttribute("room", repository.findRoomById(roomId));
+        model.addAttribute("chatRoomId", chatRoomId);
+        model.addAttribute("nickname", nickname);
+        log.info("{} : {}", chatRoomId, nickname);
+        return "chat/room";
     }
 }
