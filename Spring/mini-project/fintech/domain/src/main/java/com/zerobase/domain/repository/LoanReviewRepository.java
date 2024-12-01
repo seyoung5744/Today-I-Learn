@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LoanReviewRepository extends JpaRepository<LoanReview, Long> {
 
+    LoanReview findByUserKey(String userKey);
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,13 +21,18 @@ public class LoanReview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "usr_key")
+    private String userKey;
+
     @Column(name = "loan_lmt_amt")
     private Long loanLimitAmount;
 
     @Column(name = "loan_intrt")
     private Double loanInterest;
 
-    private LoanReview(Long loanLimitAmount, Double loanInterest) {
+    @Builder
+    private LoanReview(String userKey, Long loanLimitAmount, Double loanInterest) {
+        this.userKey = userKey;
         this.loanLimitAmount = loanLimitAmount;
         this.loanInterest = loanInterest;
     }
