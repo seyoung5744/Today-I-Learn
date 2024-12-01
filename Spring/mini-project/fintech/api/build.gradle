@@ -9,4 +9,5 @@ dependencies {
 
     //다른 패키지 의존성 추가
     implementation project(':domain')
+    runtimeOnly 'com.h2database:h2'
 }

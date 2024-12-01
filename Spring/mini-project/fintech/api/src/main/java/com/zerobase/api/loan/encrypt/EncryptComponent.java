@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EncryptComponent {
 
-    private final String secretKey = "12314151315352657472625252";
+    private final String secretKey = "12314151315352657472625254564812";
 
     public String encryptString(String encryptString) {
         try {
