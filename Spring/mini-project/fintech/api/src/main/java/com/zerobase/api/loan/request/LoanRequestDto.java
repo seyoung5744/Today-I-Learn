@@ -3,11 +3,15 @@ package com.zerobase.api.loan.request;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@Getter
+@NoArgsConstructor
 public class LoanRequestDto {
 
     @Getter
     @NoArgsConstructor
+//    @ToString
     public static class LoanRequestInputDto {
 
         private String userName;

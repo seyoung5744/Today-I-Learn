@@ -3,10 +3,12 @@ package com.zerobase.api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 
 
-@EntityScan(basePackages = {"com.zerobase.domain"})
 @SpringBootApplication
+@EntityScan(basePackages = {"com.zerobase.domain"})
+@ComponentScan(basePackages = {"com.zerobase"})
 public class ApiApplication {
 
     public static void main(String[] args) {

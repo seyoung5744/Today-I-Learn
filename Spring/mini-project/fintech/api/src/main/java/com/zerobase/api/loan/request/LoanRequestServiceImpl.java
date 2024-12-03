@@ -6,6 +6,8 @@ import com.zerobase.api.loan.request.LoanRequestDto.LoanRequestInputDto;
 import com.zerobase.api.loan.request.LoanRequestDto.LoanRequestResponseDto;
 import com.zerobase.domain.domain.UserInfo;
 import com.zerobase.domain.repository.UserInfoRepository;
+import com.zerobase.kafka.enums.KafkaTopic;
+import com.zerobase.kafka.producer.LoanRequestSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ public class LoanRequestServiceImpl implements LoanRequestService {
     private final GenerateKey generateKey;
     private final UserInfoRepository userInfoRepository;
     private final EncryptComponent encryptComponent;
+    private final LoanRequestSender loanRequestSender;
 
     @Override
     public LoanRequestResponseDto loanRequestMain(LoanRequestInputDto loanRequestInputDto) {
@@ -25,9 +28,11 @@ public class LoanRequestServiceImpl implements LoanRequestService {
             encryptComponent.encryptString(loanRequestInputDto.getUserRegistrationNumber())
         );
 
-        saveUserInfo(loanRequestInputDto.toUserInfoDto(userKey));
+        UserInfoDto userInfoDto = loanRequestInputDto.toUserInfoDto(userKey);
 
-        loanRequestReview(userKey);
+        saveUserInfo(userInfoDto);
+
+        loanRequestReview(userInfoDto);
 
         return new LoanRequestDto.LoanRequestResponseDto(userKey);
     }
@@ -40,7 +45,10 @@ public class LoanRequestServiceImpl implements LoanRequestService {
     }
 
     @Override
-    public void loanRequestReview(String userKey) {
-
+    public void loanRequestReview(UserInfoDto userInfoDto) {
+        loanRequestSender.sendMessage(
+            KafkaTopic.LOAN_REQUEST,
+            userInfoDto.toLoanRequestKafkaDto()
+        );
     }
 }

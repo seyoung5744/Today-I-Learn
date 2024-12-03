@@ -12,6 +12,7 @@ dependencies {
 
     //다른 패키지 의존성 추가
     implementation project(':domain')
+    implementation project(':kafka')
 
     // test
     runtimeOnly 'com.h2database:h2'
