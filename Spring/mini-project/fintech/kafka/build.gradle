@@ -1,0 +1,9 @@
+plugins {}
+
+version '0.0.1'
+
+dependencies {
+    // kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.4'
+}

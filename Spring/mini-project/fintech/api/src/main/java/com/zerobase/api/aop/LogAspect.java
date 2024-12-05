@@ -26,7 +26,7 @@ public class LogAspect {
 
         stopWatch.stop();
 
-        log.info("{} {} {}", joinPoint.getSignature().getName(), joinPoint.getArgs()[0], stopWatch.lastTaskInfo().getTimeMillis());
+        log.info("{} {}", joinPoint.getSignature().getName(), stopWatch.lastTaskInfo().getTimeMillis());
 
         return result;
     }

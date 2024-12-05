@@ -8,5 +8,5 @@ public interface LoanRequestService {
 
     UserInfo saveUserInfo(UserInfoDto userInfoDto);
 
-    void loanRequestReview(String userKey);
+    void loanRequestReview(UserInfoDto userInfoDto);
 }

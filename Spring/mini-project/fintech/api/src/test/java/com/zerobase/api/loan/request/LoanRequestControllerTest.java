@@ -12,6 +12,7 @@ import com.zerobase.api.loan.encrypt.EncryptComponent;
 import com.zerobase.api.loan.request.LoanRequestDto.LoanRequestInputDto;
 import com.zerobase.domain.domain.UserInfo;
 import com.zerobase.domain.repository.UserInfoRepository;
+import com.zerobase.kafka.producer.LoanRequestSender;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,8 @@ class LoanRequestControllerTest {
 
     private UserInfoRepository userInfoRepository = Mockito.mock(UserInfoRepository.class);
 
+    private LoanRequestSender loanRequestSender = Mockito.mock(LoanRequestSender.class);
+
     private ObjectMapper objectMapper;
 
     @MockBean
@@ -48,7 +51,7 @@ class LoanRequestControllerTest {
         generateKey = new GenerateKey();
         encryptComponent = new EncryptComponent();
         loanRequestService = new LoanRequestServiceImpl(
-            generateKey, userInfoRepository, encryptComponent
+            generateKey, userInfoRepository, encryptComponent, loanRequestSender
         );
         loanRequestController = new LoanRequestController(loanRequestService);
 
