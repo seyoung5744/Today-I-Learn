@@ -1,13 +1,12 @@
-package com.zerobase.api;
+package com.zerobase.consumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
-@SpringBootApplication(scanBasePackages = {"com.zerobase"})
-public class ApiApplication {
+@SpringBootApplication
+public class ConsumerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ApiApplication.class, args);
+        SpringApplication.run(ConsumerApplication.class, args);
     }
 }
