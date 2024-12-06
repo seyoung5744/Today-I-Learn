@@ -22,4 +22,5 @@ public class LoanRequestDto {
         this.userIncomeAmount = userIncomeAmount;
         this.userRegistrationNumber = userRegistrationNumber;
     }
+
 }
