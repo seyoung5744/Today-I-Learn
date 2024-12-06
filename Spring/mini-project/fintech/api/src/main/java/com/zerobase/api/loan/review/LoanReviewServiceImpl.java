@@ -8,6 +8,7 @@ import com.zerobase.domain.domain.LoanReview;
 import com.zerobase.domain.repository.LoanReviewRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,6 +28,7 @@ public class LoanReviewServiceImpl implements LoanReviewService {
     }
 
     @Override
+    @Cacheable(value = {"REVIEW"}, key = "#userKey", cacheManager = "redisCacheManager")
     public Optional<LoanReview> getLoanResult(String userKey) {
         return loanReviewRepository.findByUserKey(userKey);
     }
