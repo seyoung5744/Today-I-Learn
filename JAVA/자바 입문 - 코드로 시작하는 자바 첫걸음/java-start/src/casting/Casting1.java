@@ -1,4 +1,4 @@
-package scope;
+package casting;
 
 public class Casting1 {
 
