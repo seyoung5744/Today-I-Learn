@@ -8,7 +8,9 @@ public class MainV1 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        NetworkServiceV1_1 networkService = new NetworkServiceV1_1();
+//        NetworkServiceV1_1 networkService = new NetworkServiceV1_1();
+//        NetworkServiceV1_2 networkService = new NetworkServiceV1_2();
+        NetworkServiceV1_3 networkService = new NetworkServiceV1_3();
 
         while (true) {
             System.out.print("전송할 문자: ");
