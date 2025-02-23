@@ -13,7 +13,7 @@ public abstract class ExecutorUtils {
             int active = poolExecutor.getActiveCount();
             int queuedTasks = poolExecutor.getQueue().size();
             long completedTask = poolExecutor.getCompletedTaskCount();
-            log("[pool=" + pool + ", active=" + active + ", queuedTasks=" + queuedTasks + ", completedTask=" + completedTask);
+            log("[pool=" + pool + ", active=" + active + ", queuedTasks=" + queuedTasks + ", completedTask=" + completedTask + "]");
         } else {
             log(executorService);
         }
