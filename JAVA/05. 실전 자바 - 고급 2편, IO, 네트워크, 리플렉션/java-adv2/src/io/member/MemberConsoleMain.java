@@ -2,6 +2,7 @@ package io.member;
 
 import io.member.impl.DataMemberRepository;
 import io.member.impl.FileMemberRepository;
+import io.member.impl.ObjectMemberRepository;
 
 import java.util.List;
 import java.util.Scanner;
@@ -10,7 +11,8 @@ public class MemberConsoleMain {
 
     //    private static final MemberRepository repository = new MemoryMemberRepository();
 //    private static final MemberRepository repository = new FileMemberRepository();
-    private static final MemberRepository repository = new DataMemberRepository();
+//    private static final MemberRepository repository = new DataMemberRepository();
+    private static final MemberRepository repository = new ObjectMemberRepository();
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
