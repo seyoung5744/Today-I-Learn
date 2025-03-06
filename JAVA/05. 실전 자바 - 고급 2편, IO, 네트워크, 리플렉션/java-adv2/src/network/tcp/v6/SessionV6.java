@@ -43,7 +43,7 @@ public class SessionV6 implements Runnable {
                 log("Client <- Server: " + toSend);
             }
         } catch (IOException e) {
-            log(e);
+            log(e); // Thread-0
         } finally {
             sessionManager.remove(this);
             close();
