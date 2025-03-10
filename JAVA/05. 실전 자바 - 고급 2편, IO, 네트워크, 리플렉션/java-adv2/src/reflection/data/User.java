@@ -1,4 +1,4 @@
-package reflection;
+package reflection.data;
 
 public class User {
 

@@ -1,5 +1,7 @@
 package reflection;
 
+import reflection.data.User;
+
 import java.lang.reflect.Field;
 
 public class FieldV2 {
