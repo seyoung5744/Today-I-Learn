@@ -5,9 +5,9 @@ import hello.core.member.Member;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 //@MainDiscountPolicy
-@Primary
+//@Primary
 //@Qualifier("fixDiscountPolicy")
 public class FixDiscountPolicy implements DiscountPolicy {
 
