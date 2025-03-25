@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import kr.co.samplecompany.myrestfulservice.bean.AdminUser;
+import kr.co.samplecompany.myrestfulservice.bean.AdminUserV2;
 import kr.co.samplecompany.myrestfulservice.bean.User;
 import kr.co.samplecompany.myrestfulservice.dao.UserDaoService;
 import kr.co.samplecompany.myrestfulservice.exception.UserNotFoundException;
@@ -26,7 +27,7 @@ public class AdminUserController {
         this.service = service;
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/v1/users/{id}")
     public MappingJacksonValue retrieveUser4Admin(@PathVariable int id) {
         User user = service.findOne(id);
 
@@ -40,6 +41,28 @@ public class AdminUserController {
 
         SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "joinDate", "ssn");
         FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfo", filter);
+
+        MappingJacksonValue mapping = new MappingJacksonValue(adminUser);
+        mapping.setFilters(filters);
+
+        return mapping;
+    }
+
+    @GetMapping("/v2/users/{id}")
+    public MappingJacksonValue retrieveUser4AdminV2(@PathVariable int id) {
+        User user = service.findOne(id);
+
+        AdminUserV2 adminUser = new AdminUserV2();
+        if (user == null) {
+            throw new UserNotFoundException(String.format("ID[%s] not found", id));
+        }
+
+        // adminUser.setName(user.getName()); 와 같이 속성을 일일이 복사해줄 작업을 대신해주는 utils
+        BeanUtils.copyProperties(user, adminUser);
+        adminUser.setGrade("VIP");
+
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "joinDate", "grade");
+        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfoV2", filter);
 
         MappingJacksonValue mapping = new MappingJacksonValue(adminUser);
         mapping.setFilters(filters);
