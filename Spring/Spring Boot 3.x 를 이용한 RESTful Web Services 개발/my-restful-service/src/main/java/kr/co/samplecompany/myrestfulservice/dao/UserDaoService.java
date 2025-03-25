@@ -29,6 +29,10 @@ public class UserDaoService {
             user.setId(++userCount);
         }
 
+        if (user.getJoinDate() == null) {
+            user.setJoinDate(new Date());
+        }
+
         users.add(user);
         return user;
     }
