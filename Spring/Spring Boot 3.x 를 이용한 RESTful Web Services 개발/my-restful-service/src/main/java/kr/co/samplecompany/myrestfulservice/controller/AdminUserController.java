@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin")
 public class AdminUserController {
@@ -45,4 +47,24 @@ public class AdminUserController {
         return mapping;
     }
 
+    @GetMapping("/users")
+    public MappingJacksonValue retrieveAllUses4Admin() {
+        List<User> users = service.findAll();
+
+        List<AdminUser> adminUsers = users.stream()
+                .map(user -> {
+                    AdminUser adminUser = new AdminUser();
+                    BeanUtils.copyProperties(user, adminUser);
+                    return adminUser;
+                })
+                .toList();
+
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "joinDate", "ssn");
+        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfo", filter);
+
+        MappingJacksonValue mapping = new MappingJacksonValue(adminUsers);
+        mapping.setFilters(filters);
+
+        return mapping;
+    }
 }
