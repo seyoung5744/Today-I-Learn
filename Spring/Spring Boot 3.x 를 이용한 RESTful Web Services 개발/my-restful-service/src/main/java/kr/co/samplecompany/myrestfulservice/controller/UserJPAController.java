@@ -1,11 +1,11 @@
 package kr.co.samplecompany.myrestfulservice.controller;
 
 import jakarta.validation.Valid;
+import kr.co.samplecompany.myrestfulservice.bean.Post;
 import kr.co.samplecompany.myrestfulservice.bean.User;
 import kr.co.samplecompany.myrestfulservice.exception.UserNotFoundException;
 import kr.co.samplecompany.myrestfulservice.repository.UserRepository;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -74,5 +74,13 @@ public class UserJPAController {
                 .toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/users/{id}/posts")
+    public List<Post> retriveAllPostByUser(@PathVariable int id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("id-" + id));
+
+        return user.getPosts();
     }
 }
