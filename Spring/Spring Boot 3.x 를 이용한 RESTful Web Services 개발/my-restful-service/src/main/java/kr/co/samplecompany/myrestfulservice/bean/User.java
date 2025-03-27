@@ -34,7 +34,7 @@ public class User {
 
     @Schema(title = "사용자 등록일", description = "사용자 등록일을 입력하지 않으면 현재 날짜로 지정됩니다.")
     @Past(message = "등록일은 미래 날짜를 입력하실 수 없습니다.")
-    private Date joinDate;
+    private Date joinDate = new Date();
 
     //    @JsonIgnore
     @Schema(title = "사용자 비밀번호", description = "사용자 비밀번호를 입력합니다.")
