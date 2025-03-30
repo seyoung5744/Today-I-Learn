@@ -39,7 +39,8 @@ public class RequestBodyJsonController {
     }
 
     /**
-     * @RequestBody HttpMessageConverter 사용 -> StringHttpMessageConverter 적용
+     * @RequestBody
+     * - HttpMessageConverter 사용 -> StringHttpMessageConverter 적용
      * @ResponseBody - 모든 메서드에 @ResponseBody 적용
      * - 메시지 바디 정보 직접 반환(view 조회X)
      * - HttpMessageConverter 사용 -> StringHttpMessageConverter 적용
