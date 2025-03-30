@@ -20,18 +20,18 @@ public class HelloData {
         return username;
     }
 
-//    public void setUsername(String username) {
-//        System.out.println("HelloData.setUsername");
-//        this.username = username;
-//    }
+    public void setUsername(String username) {
+        System.out.println("HelloData.setUsername");
+        this.username = username;
+    }
 
     public int getAge() {
         System.out.println("HelloData.getAge");
         return age;
     }
 
-//    public void setAge(int age) {
-//        System.out.println("HelloData.setAge");
-//        this.age = age;
-//    }
+    public void setAge(int age) {
+        System.out.println("HelloData.setAge");
+        this.age = age;
+    }
 }
