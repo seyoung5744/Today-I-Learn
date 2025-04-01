@@ -25,6 +25,7 @@ public class ItemController {
 
     @GetMapping
     public String items(Model model) {
+        log.info("items form");
         List<Item> items = itemRepository.findAll();
         model.addAttribute("items", items);
         return "items/items";
