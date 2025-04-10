@@ -4,14 +4,14 @@
 <mapper namespace="hello.itemservice.repository.mybatis.ItemMapper">
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into item (item_name, price, quantitu) values(#{itemName}, #{price}, #{quantity})
+        insert into item (item_name, price, quantity) values(#{itemName}, #{price}, #{quantity})
     </insert>
 
     <update id="update">
         update item
         set item_name = #{updateParam.itemName},
             price = #{updateParam.price},
-            quantitu=#{updateParam.quantity}
+            quantity=#{updateParam.quantity}
         where id = #{id}
     </update>
 
