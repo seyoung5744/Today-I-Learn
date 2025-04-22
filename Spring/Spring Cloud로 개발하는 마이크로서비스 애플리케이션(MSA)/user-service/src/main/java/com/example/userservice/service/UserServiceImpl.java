@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
@@ -24,7 +24,10 @@ public class UserServiceImpl implements UserService{
         User user = mapper.map(userDto, User.class);
         user.setEncryptedPwd("encrypted_password");
 
-        userRepository.save(user);
-        return null;
+        User savedUser = userRepository.save(user);
+
+        UserDto returnUserDto = mapper.map(savedUser, UserDto.class);
+
+        return returnUserDto;
     }
 }

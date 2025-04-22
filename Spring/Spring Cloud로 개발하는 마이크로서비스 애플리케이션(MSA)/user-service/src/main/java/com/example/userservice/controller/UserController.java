@@ -4,11 +4,14 @@ import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.UserService;
 import com.example.userservice.vo.CreateUserRequest;
 import com.example.userservice.vo.Greeting;
+import com.example.userservice.vo.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -35,14 +38,17 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public String createUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserResponse> createUser(@RequestBody CreateUserRequest request) {
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserDto userDto = mapper.map(request, UserDto.class);
-        
-        userService.createUser(userDto);
 
-        return "Create user method is called";
+        UserDto returnedUserDto = userService.createUser(userDto);
+
+        UserResponse userResponse = mapper.map(returnedUserDto, UserResponse.class);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userResponse);
     }
 }
