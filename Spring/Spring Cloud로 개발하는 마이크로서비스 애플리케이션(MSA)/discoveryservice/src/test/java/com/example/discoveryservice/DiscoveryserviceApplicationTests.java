@@ -1,10 +1,10 @@
-package com.example.diecoveryservice;
+package com.example.discoveryservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DiecoveryserviceApplicationTests {
+class DiscoveryserviceApplicationTests {
 
     @Test
     void contextLoads() {
