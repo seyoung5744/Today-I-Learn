@@ -1,8 +1,10 @@
 package com.example.userservice.dto;
 
+import com.example.userservice.vo.OrderResponse;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class UserDto {
@@ -14,4 +16,6 @@ public class UserDto {
     private LocalDateTime createdAt;
 
     private String encryptedPwd;
+
+    private List<OrderResponse> orders;
 }

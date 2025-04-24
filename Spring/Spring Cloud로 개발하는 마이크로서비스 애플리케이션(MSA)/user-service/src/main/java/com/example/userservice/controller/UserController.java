@@ -1,6 +1,7 @@
 package com.example.userservice.controller;
 
 import com.example.userservice.dto.UserDto;
+import com.example.userservice.jpa.User;
 import com.example.userservice.service.UserService;
 import com.example.userservice.vo.CreateUserRequest;
 import com.example.userservice.vo.Greeting;
@@ -14,8 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
-@RequestMapping
+@RequestMapping("/user-service")
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -26,12 +29,12 @@ public class UserController {
     private final UserService userService;
 
 
-    @GetMapping("/user-service/health-check")
+    @GetMapping("/health-check")
     public String status() {
         return String.format("It's Working in User Service on PORT %s", env.getProperty("local.server.port"));
     }
 
-    @GetMapping("/user-service/welcome")
+    @GetMapping("/welcome")
     public String welcome() {
 //        return env.getProperty("greeting.message");
         return greeting.getMessage();
@@ -50,5 +53,26 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(userResponse);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        List<User> users = userService.getUserByAll();
+
+        List<UserResponse> result = users.stream()
+                .map(user -> new ModelMapper().map(user, UserResponse.class))
+                .toList();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(result);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<UserResponse> getUser(@PathVariable String userId) {
+        UserDto userDto = userService.getUserByUserId(userId);
+        UserResponse result = new ModelMapper().map(userDto, UserResponse.class);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(result);
     }
 }
