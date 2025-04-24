@@ -19,9 +19,13 @@ public class WebSecurity {
         http.headers((headers) -> headers.frameOptions((frameOptions) -> frameOptions.sameOrigin()));
 
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(new AntPathRequestMatcher("/users", "POST")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(new AntPathRequestMatcher("/users/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
+//                .requestMatchers(new AntPathRequestMatcher("/users", "POST")).permitAll()
+//                .requestMatchers(new AntPathRequestMatcher("/welcome")).permitAll()
+//                .requestMatchers(new AntPathRequestMatcher("/health-check")).permitAll()
+//                .anyRequest().authenticated()
         );
 
         return http.build();
