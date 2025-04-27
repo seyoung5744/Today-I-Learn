@@ -70,7 +70,7 @@ public class WebSecurity {
     }
 
     private AuthenticationFilter getAuthenticationFilter(AuthenticationManager authenticationManager) {
-        return new AuthenticationFilter(authenticationManager, userService);
+        return new AuthenticationFilter(authenticationManager, userService, env);
     }
 
     // UserServiceImpl 이랑 순환 참조 발생 -> 일단 실습을 위해 UserServiceApplication 로 이동

@@ -1,7 +1,7 @@
 package com.example.userservice.controller;
 
 import com.example.userservice.dto.UserDto;
-import com.example.userservice.jpa.User;
+import com.example.userservice.jpa.Users;
 import com.example.userservice.service.UserService;
 import com.example.userservice.vo.CreateUserRequest;
 import com.example.userservice.vo.Greeting;
@@ -57,7 +57,7 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<List<UserResponse>> getUsers() {
-        List<User> users = userService.getUserByAll();
+        List<Users> users = userService.getUserByAll();
 
         List<UserResponse> result = users.stream()
                 .map(user -> new ModelMapper().map(user, UserResponse.class))

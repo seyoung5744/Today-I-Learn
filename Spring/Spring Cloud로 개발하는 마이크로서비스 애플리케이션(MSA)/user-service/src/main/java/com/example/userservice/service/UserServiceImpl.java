@@ -1,12 +1,13 @@
 package com.example.userservice.service;
 
 import com.example.userservice.dto.UserDto;
-import com.example.userservice.jpa.User;
 import com.example.userservice.jpa.UserRepository;
+import com.example.userservice.jpa.Users;
 import com.example.userservice.vo.OrderResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,10 +26,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User userEntity = userRepository.findByEmail(username)
+        Users usersEntity = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        return new org.springframework.security.core.userdetails.User(userEntity.getEmail(), userEntity.getEncryptedPwd(),
+        return new User(usersEntity.getEmail(), usersEntity.getEncryptedPwd(),
                 true, true, true, true,
                 new ArrayList<>());
     }
@@ -38,22 +39,22 @@ public class UserServiceImpl implements UserService {
         userDto.setUserId(UUID.randomUUID().toString());
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        User user = mapper.map(userDto, User.class);
-        user.setEncryptedPwd(passwordEncoder.encode(userDto.getPwd()));
+        Users users = mapper.map(userDto, Users.class);
+        users.setEncryptedPwd(passwordEncoder.encode(userDto.getPwd()));
 
-        User savedUser = userRepository.save(user);
+        Users savedUsers = userRepository.save(users);
 
-        UserDto returnUserDto = mapper.map(savedUser, UserDto.class);
+        UserDto returnUserDto = mapper.map(savedUsers, UserDto.class);
 
         return returnUserDto;
     }
 
     @Override
     public UserDto getUserByUserId(String userId) {
-        User user = userRepository.findByUserId(userId)
+        Users users = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
-        UserDto userDto = new ModelMapper().map(user, UserDto.class);
+        UserDto userDto = new ModelMapper().map(users, UserDto.class);
 
         List<OrderResponse> orders = new ArrayList<>();
         userDto.setOrders(orders);
@@ -62,7 +63,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUserByAll() {
+    public List<Users> getUserByAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public UserDto getUserDetailsByEmail(String username) {
+        Users users = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
+        UserDto userDto = new ModelMapper().map(users, UserDto.class);
+        return userDto;
     }
 }
