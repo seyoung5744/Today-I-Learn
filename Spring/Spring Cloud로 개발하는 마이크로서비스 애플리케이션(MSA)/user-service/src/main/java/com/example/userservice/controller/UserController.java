@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@RequestMapping("/user-service")
+@RequestMapping
 @RestController
 @RequiredArgsConstructor
 public class UserController {
