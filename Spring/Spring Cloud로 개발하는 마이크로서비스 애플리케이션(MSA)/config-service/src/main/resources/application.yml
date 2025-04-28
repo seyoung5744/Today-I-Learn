@@ -8,6 +8,7 @@ spring:
     config:
       server:
         git:
-          uri: file:\\\C:\Users\seyou\Desktop\my_Git_Hub\Today-I-Learn\Spring\spring-cloud-config
-#          default-label: main
-
+          uri: https://github.com/seyoung5744/spring-cloud-config
+#          username: [your username]
+#          password: [your password]
+#          uri: file:\\\C:\Users\seyou\Desktop\my_Git_Hub\Today-I-Learn\Spring\spring-cloud-config
