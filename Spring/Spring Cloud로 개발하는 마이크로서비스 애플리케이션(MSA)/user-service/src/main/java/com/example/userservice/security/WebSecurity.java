@@ -38,6 +38,7 @@ public class WebSecurity {
         http.authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/users/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/actuator/**")).permitAll()
                         /*requestMatchers(new AntPathRequestMatcher("/**")).permitAll()*/
                                 .requestMatchers("/**").access((authentication, request) -> {
                                     String clientIp = request.getRequest().getRemoteAddr();

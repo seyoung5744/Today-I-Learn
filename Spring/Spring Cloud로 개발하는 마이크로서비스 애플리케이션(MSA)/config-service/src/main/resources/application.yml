@@ -9,4 +9,5 @@ spring:
       server:
         git:
           uri: file:\\\C:\Users\seyou\Desktop\my_Git_Hub\Today-I-Learn\Spring\spring-cloud-config
+#          default-label: main
 
