@@ -4,11 +4,14 @@ import com.housing.back.common.CertificationNumber;
 import com.housing.back.dto.request.auth.CheckCertificationRequestDto;
 import com.housing.back.dto.request.auth.EmailCertificationRequestDto;
 import com.housing.back.dto.request.auth.IdCheckRequestDto;
+import com.housing.back.dto.request.auth.SignUpRequestDto;
 import com.housing.back.dto.response.ResponseDto;
 import com.housing.back.dto.response.auth.CheckCertificationResponseDto;
 import com.housing.back.dto.response.auth.EmailCertificationResponseDto;
 import com.housing.back.dto.response.auth.IdCheckResponseDto;
+import com.housing.back.dto.response.auth.SignUpResponseDto;
 import com.housing.back.entity.CertificationEntity;
+import com.housing.back.entity.UserEntity;
 import com.housing.back.provider.EmailProvider;
 import com.housing.back.repository.CertificationRepository;
 import com.housing.back.repository.UserRepository;
@@ -16,6 +19,8 @@ import com.housing.back.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -27,6 +32,7 @@ public class AuthServiceImpl implements AuthService {
     private final CertificationRepository certificationRepository;
 
     private final EmailProvider emailProvider;
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public ResponseEntity<? super IdCheckResponseDto> idCheck(IdCheckRequestDto request) {
@@ -89,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
             }
 
             boolean isMatched = certificationEntity.getEmail().equals(email) && certificationEntity.getCertificationNumber().equals(certificationNumber);
-            if(!isMatched) {
+            if (!isMatched) {
                 return CheckCertificationResponseDto.certificationFail();
             }
 
@@ -99,5 +105,39 @@ public class AuthServiceImpl implements AuthService {
             return ResponseDto.databaseError();
         }
         return CheckCertificationResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto request) {
+
+        try {
+            String userId = request.getId();
+            boolean isExited = userRepository.existsByUserId(userId);
+            if (isExited) {
+                return SignUpResponseDto.duplicateId();
+            }
+
+            String email = request.getEmail();
+            String certificationNUmber = request.getCertificationNumber();
+            CertificationEntity certificationEntity = certificationRepository.findByUserId(userId);
+            boolean isMatched = certificationEntity.getEmail().equals(email) && certificationEntity.getCertificationNumber().equals(certificationNUmber);
+            if(!isMatched) {
+                return SignUpResponseDto.certificationFail();
+            }
+
+            String password = request.getPassword();
+            String encodedPassword = passwordEncoder.encode(password);
+            request.setPassword(encodedPassword);
+
+            UserEntity userEntity = request.toEntity();
+            userRepository.save(userEntity);
+
+            certificationRepository.deleteByUserId(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return SignUpResponseDto.success();
     }
 }
