@@ -1,17 +1,39 @@
 server:
-  port: 4040
+  port: 8080
 
 # DB
 spring:
   application:
     name: housing-service
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/rental_housing?serverTimezone=UTC&characterEncoding=UTF-8
-    username: developer
-    password: developer
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  # Gmail Setting
+  mail:
+    host: smtp.gmail.com  # SMTP 서버 호스트
+    port: 587 # SMTP 서버 포트
+    username: ${MAIL_USERNAME}  # SMTP 서버 로그인 아이디
+    password: ${MAIL_PASSWORD} # SMTP 서버 로그인 비밀번호
+    properties:
+      mail:
+        smtp:
+          auth: true # 사용자 인증 시도 여부
+          starttls:
+            enable: true # starttls 활성화 여부
+
+
 
 # JWT Secret Key
 jwt:
-  secret-key: ThisStatementIsJwtSecretKeyDoNotUseThisStatement
+  secret-key: ${JWT_SECRET_KEY}
 

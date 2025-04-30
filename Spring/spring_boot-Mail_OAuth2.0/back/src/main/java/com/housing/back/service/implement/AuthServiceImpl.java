@@ -1,8 +1,14 @@
 package com.housing.back.service.implement;
 
+import com.housing.back.common.CertificationNumber;
+import com.housing.back.dto.request.auth.EmailCertificationRequestDto;
 import com.housing.back.dto.request.auth.IdCheckRequestDto;
 import com.housing.back.dto.response.ResponseDto;
+import com.housing.back.dto.response.auth.EmailCertificationResponseDto;
 import com.housing.back.dto.response.auth.IdCheckResponseDto;
+import com.housing.back.entity.CertificationEntity;
+import com.housing.back.provider.EmailProvider;
+import com.housing.back.repository.CertificationRepository;
 import com.housing.back.repository.UserRepository;
 import com.housing.back.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +22,9 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+    private final CertificationRepository certificationRepository;
+
+    private final EmailProvider emailProvider;
 
     @Override
     public ResponseEntity<? super IdCheckResponseDto> idCheck(IdCheckRequestDto request) {
@@ -31,5 +40,36 @@ public class AuthServiceImpl implements AuthService {
             return ResponseDto.databaseError();
         }
         return IdCheckResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super EmailCertificationResponseDto> emailCertification(EmailCertificationRequestDto request) {
+        try {
+
+            String userId = request.getId();
+            String email = request.getEmail();
+
+            boolean isExisted = userRepository.existsByUserId(userId);
+            if (isExisted) {
+                return EmailCertificationResponseDto.duplicateId();
+            }
+
+            String certificationNumber = CertificationNumber.getCertificationNumber();
+
+            boolean isSuccessed = emailProvider.sendCertificationMail(email, certificationNumber);
+            if (!isSuccessed) {
+                return EmailCertificationResponseDto.mailSendFail();
+            }
+
+            CertificationEntity certificationEntity = new CertificationEntity(userId, email, certificationNumber);
+            certificationRepository.save(certificationEntity);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Exception [Err_Msg]: {}", e.getMessage());
+            return ResponseDto.databaseError();
+        }
+
+        return EmailCertificationResponseDto.success();
     }
 }
