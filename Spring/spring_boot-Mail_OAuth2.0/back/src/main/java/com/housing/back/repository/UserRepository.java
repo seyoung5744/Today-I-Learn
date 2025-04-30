@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, String> {
 
+    boolean existsByUserId(String userId);
     Optional<UserEntity> findByUserId(String userId);
 }
