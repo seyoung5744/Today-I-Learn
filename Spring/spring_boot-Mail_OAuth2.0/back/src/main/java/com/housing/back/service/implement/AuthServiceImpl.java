@@ -1,9 +1,11 @@
 package com.housing.back.service.implement;
 
 import com.housing.back.common.CertificationNumber;
+import com.housing.back.dto.request.auth.CheckCertificationRequestDto;
 import com.housing.back.dto.request.auth.EmailCertificationRequestDto;
 import com.housing.back.dto.request.auth.IdCheckRequestDto;
 import com.housing.back.dto.response.ResponseDto;
+import com.housing.back.dto.response.auth.CheckCertificationResponseDto;
 import com.housing.back.dto.response.auth.EmailCertificationResponseDto;
 import com.housing.back.dto.response.auth.IdCheckResponseDto;
 import com.housing.back.entity.CertificationEntity;
@@ -71,5 +73,31 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return EmailCertificationResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super CheckCertificationResponseDto> checkCertification(CheckCertificationRequestDto request) {
+        try {
+
+            String userId = request.getId();
+            String email = request.getEmail();
+            String certificationNumber = request.getCertificationNumber();
+
+            CertificationEntity certificationEntity = certificationRepository.findByUserId(userId);
+            if (certificationEntity == null) {
+                return CheckCertificationResponseDto.certificationFail();
+            }
+
+            boolean isMatched = certificationEntity.getEmail().equals(email) && certificationEntity.getCertificationNumber().equals(certificationNumber);
+            if(!isMatched) {
+                return CheckCertificationResponseDto.certificationFail();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Exception [Err_Msg]: {}", e.getMessage());
+            return ResponseDto.databaseError();
+        }
+        return CheckCertificationResponseDto.success();
     }
 }
