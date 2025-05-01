@@ -1,5 +1,6 @@
 import InputBox from 'conponents/inputBox'
-import React, { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
+import './style.css';
 
 export default function SignUp() {
 
@@ -26,6 +27,9 @@ export default function SignUp() {
     const [passwordCheckMessage, setPasswordCheckMessage] = useState<string>('');
     const [emailMessage, setEmailMessage] = useState<string>('');
     const [certificationNumberMessage, setCertificationNumberMessage] = useState<string>('');
+
+    const signUpButtonClass = id && password && passwordCheck && email && certificationNumber ?
+    'primary-button-lg' : 'disable-button-lg';
 
     const onIdChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
@@ -93,7 +97,7 @@ export default function SignUp() {
                     <div className='sign-up-title'>{'임대 주택 가격 서비스'}</div>
                     <div className='sign-up-content-box'>
                         <div className='sign-up-content-sns-sign-in-box'>
-                            <div className='sign-up-content-sns-sign-in-title'>{'SNS 로그인'}</div>
+                            <div className='sign-up-content-sns-sign-in-title'>{'SNS 회원가입'}</div>
                             <div className='sign-up-content-sns-sign-in-button-box'>
                                 <div className='kakao-sign-in-button'></div>
                                 <div className='naver-sign-in-button'></div>
@@ -108,7 +112,7 @@ export default function SignUp() {
                             <InputBox ref={certificationNumberRef} title='인증번호' placeholder='인증번호 4자리를 입력해주세요' type='text' value={certificationNumber} onChange={onCertificationNumberChangeHandler} isErrorMessage={isCertificationNumberError} message={certificationNumberMessage} buttonTitle='인증 확인' onButtonClick={onCertificationNumberButtonClickHandler} onKeyDown={onCertificationNumberKeyDownHandler}/>
                         </div>
                         <div className='sign-up-content-button-box'>
-                            <div className='disable-button-lg full-width'>{'회원가입'}</div>
+                            <div className={`${signUpButtonClass} full-width`}>{'회원가입'}</div>
                             <div className='text-link-lg full-width'>{'로그인'}</div>
                         </div>
                     </div>
