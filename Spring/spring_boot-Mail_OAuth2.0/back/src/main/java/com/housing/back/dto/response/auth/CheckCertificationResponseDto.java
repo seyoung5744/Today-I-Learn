@@ -1,5 +1,7 @@
 package com.housing.back.dto.response.auth;
 
+import com.housing.back.common.ResponseCode;
+import com.housing.back.common.ResponseMessage;
 import com.housing.back.dto.response.ResponseDto;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,7 @@ public class CheckCertificationResponseDto extends ResponseDto {
     }
 
     public static ResponseEntity<ResponseDto> certificationFail() {
-        ResponseDto responseBody = new ResponseDto();
+        ResponseDto responseBody = new ResponseDto(ResponseCode.CERTIFICATION_FAIL, ResponseMessage.CERTIFICATION_FAIL);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
 }
