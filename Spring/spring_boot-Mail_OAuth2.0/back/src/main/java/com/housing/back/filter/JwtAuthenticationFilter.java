@@ -40,7 +40,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 "/api/v1/auth/id-check",
                 "/api/v1/auth/email-certification",
                 "/api/v1/auth/check-certification",
-                "/api/v1/auth/sign-up"
+                "/api/v1/auth/sign-up",
+                "/api/v1/auth/sign-in"
         ).contains(requestURI);
     }
 
@@ -63,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserEntity userEntity = userRepository.findByUserId(userId)
                     .orElseThrow(() -> new UsernameNotFoundException("user not found"));
             String role = userEntity.getRole();// role: ROLE_USER, ROLE_ADMIN
-
+            log.info("권한 {} ", role);
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(role));
 

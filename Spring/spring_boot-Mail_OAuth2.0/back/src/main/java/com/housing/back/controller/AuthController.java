@@ -1,22 +1,13 @@
 package com.housing.back.controller;
 
-import com.housing.back.dto.request.auth.CheckCertificationRequestDto;
-import com.housing.back.dto.request.auth.EmailCertificationRequestDto;
-import com.housing.back.dto.request.auth.IdCheckRequestDto;
-import com.housing.back.dto.request.auth.SignUpRequestDto;
-import com.housing.back.dto.response.auth.CheckCertificationResponseDto;
-import com.housing.back.dto.response.auth.EmailCertificationResponseDto;
-import com.housing.back.dto.response.auth.IdCheckResponseDto;
-import com.housing.back.dto.response.auth.SignUpResponseDto;
+import com.housing.back.dto.request.auth.*;
+import com.housing.back.dto.response.auth.*;
 import com.housing.back.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -44,5 +35,10 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<? super SignUpResponseDto> signUp(@Valid @RequestBody SignUpRequestDto request) {
         return authService.signUp(request);
+    }
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<? super SignInResponseDto> signIn(@Valid @RequestBody SignInRequestDto request) {
+        return authService.signIn(request);
     }
 }

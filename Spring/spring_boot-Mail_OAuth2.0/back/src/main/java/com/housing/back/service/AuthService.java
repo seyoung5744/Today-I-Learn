@@ -1,13 +1,7 @@
 package com.housing.back.service;
 
-import com.housing.back.dto.request.auth.CheckCertificationRequestDto;
-import com.housing.back.dto.request.auth.EmailCertificationRequestDto;
-import com.housing.back.dto.request.auth.IdCheckRequestDto;
-import com.housing.back.dto.request.auth.SignUpRequestDto;
-import com.housing.back.dto.response.auth.CheckCertificationResponseDto;
-import com.housing.back.dto.response.auth.EmailCertificationResponseDto;
-import com.housing.back.dto.response.auth.IdCheckResponseDto;
-import com.housing.back.dto.response.auth.SignUpResponseDto;
+import com.housing.back.dto.request.auth.*;
+import com.housing.back.dto.response.auth.*;
 import org.springframework.http.ResponseEntity;
 
 public interface AuthService {
@@ -20,5 +14,6 @@ public interface AuthService {
 
     ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto request);
 
+    ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto request);
 
 }
