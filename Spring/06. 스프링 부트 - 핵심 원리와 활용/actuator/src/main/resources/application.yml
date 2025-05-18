@@ -24,3 +24,8 @@ info:
 logging:
   level:
     com.example.actuator.controller: debug
+
+server:
+  tomcat:
+    mbeanregistry:
+      enabled: true
