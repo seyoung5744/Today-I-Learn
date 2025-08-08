@@ -19,6 +19,8 @@ subprojects {
         }
     }
 
+    version = "1.0.0"
+
     apply plugin: 'application'
 
     repositories {
@@ -47,3 +49,9 @@ subprojects {
     }
 
 }
+
+//project(":service") {
+//    dependencies {
+//        implementation project(":data")
+//    }
+// }
