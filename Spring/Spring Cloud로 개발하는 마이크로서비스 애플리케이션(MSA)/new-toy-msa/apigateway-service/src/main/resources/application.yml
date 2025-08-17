@@ -19,13 +19,15 @@ spring:
         predicates:
           - Path=/first-service/**
         filters:
-          - AddRequestHeader=first-request, 1st-request-header-by-yaml
-          - AddResponseHeader=first-response, 1st-response-header-from-yaml
+#          - AddRequestHeader=first-request, 1st-request-header-by-yaml
+#          - AddResponseHeader=first-response, 1st-response-header-from-yaml
+          - CustomFilter
       - id: second-service
         uri: http://localhost:8082/
         predicates:
           - Path=/second-service/**
         filters:
-          - AddRequestHeader=second-request, 2st-request-header-by-yaml
-          - AddResponseHeader=second-response, 2st-response-header-from-yaml
+#          - AddRequestHeader=second-request, 2st-request-header-by-yaml
+#          - AddResponseHeader=second-response, 2st-response-header-from-yaml
+          - CustomFilter
 
