@@ -1,0 +1,6 @@
+rootProject.name = 'new-toy-msa'
+include 'first-service'
+include 'service-discovery'
+include 'second-service'
+include 'user-service'
+
