@@ -1,7 +1,7 @@
 package com.spartaboys.aop.member;
 
-import com.spartaboys.aop.member.annotaion.ClassAop;
-import com.spartaboys.aop.member.annotaion.MethodAop;
+import com.spartaboys.aop.member.annotation.ClassAop;
+import com.spartaboys.aop.member.annotation.MethodAop;
 import org.springframework.stereotype.Component;
 
 @ClassAop
