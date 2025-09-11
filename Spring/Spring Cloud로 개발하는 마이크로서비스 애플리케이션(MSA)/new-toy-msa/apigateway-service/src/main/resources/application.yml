@@ -20,18 +20,43 @@ spring:
             preLogger: true
             postLogger: true
       routes:
+      - id: user-service-register
+        uri: lb://USER-SERVICE
+        predicates:
+          - Path=/user-service/users
+          - Method=POST
+        filters:
+          - RemoveRequestHeader=Cookie
+          - RewritePath=/user-service/(?<segment>.*), /$\{segment} # , 를 기준으로 변경 전 -> 후 즉, 엔드포인트가 변경됨 (사용자의 요청 Path 를 재정의하겠다)
+
+      - id: user-service-login
+        uri: lb://USER-SERVICE
+        predicates:
+          - Path=/user-service/login
+          - Method=POST
+        filters:
+          - RemoveRequestHeader=Cookie
+          - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
       - id: user-service
         uri: lb://USER-SERVICE
         predicates:
           - Path=/user-service/**
+          - Method=GET
+        filters:
+          - RemoveRequestHeader=Cookie
+          - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
       - id: catalog-service
         uri: lb://CATALOG-SERVICE
         predicates:
           - Path=/catalog-service/**
+
       - id: order-service
         uri: lb://ORDER-SERVICE
         predicates:
           - Path=/order-service/**
+
       - id: first-service
         uri: lb://MY-FIRST-SERVICE #http://localhost:8081/
         predicates:
