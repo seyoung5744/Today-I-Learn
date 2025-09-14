@@ -6,4 +6,5 @@ include 'user-service'
 include 'apigateway-service'
 include 'catalog-service'
 include 'order-service'
+include 'config-service'
 
