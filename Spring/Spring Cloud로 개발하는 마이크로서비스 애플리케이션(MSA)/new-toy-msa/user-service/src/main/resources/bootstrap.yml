@@ -1,0 +1,5 @@
+spring:
+  cloud:
+    config: # 스프링 클라우드 config 정보를 어디서 가져올 것인지 config 서버의 위치 지정
+      uri: http://localhost:8888
+      name: ecommerce
