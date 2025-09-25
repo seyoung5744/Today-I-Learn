@@ -1,11 +1,9 @@
 server:
-  port: 0
+  port: 60000
 
 spring:
   application:
     name: user-service
-  profiles:
-    active: dev
   #  config:
 #    import: "optional:configserver:http://localhost:8888"
   h2:
@@ -22,11 +20,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-  security:
-    user:
-      name: user
-      password: $2a$10$sV.2eUObxZdqN0LIRJMTGeq/M7d0Gf/NdEintpquo8i0QOy8sNuvW
-
 
 eureka:
   instance:
@@ -38,18 +31,4 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 greeting:
-  message: Welcome to the Simple E-commerce. (spring boot)
-
-#token:
-#  expiration_time: 86400000
-#  secret: my-very-long-secret-key-123456780123456
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include:
-          - refresh
-          - health
-          - beans
-          - info
+  message: Welcome to the Simple E-commerce. (dev profile)
