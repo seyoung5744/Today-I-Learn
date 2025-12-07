@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: springboot-metrics
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      access: unrestricted
+  metrics:
+    distribution:
+      percentiles:
+        http.server.requests: 0.1, 0.5, 0.99
