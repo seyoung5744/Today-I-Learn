@@ -37,7 +37,8 @@ public class HelloController {
     }
 
     @GetMapping("/order")
-    public void order() {
+    public void order() throws InterruptedException {
         requestOrderUsecase.requestOrder();
+        TimeUnit.MICROSECONDS.sleep(50);
     }
 }

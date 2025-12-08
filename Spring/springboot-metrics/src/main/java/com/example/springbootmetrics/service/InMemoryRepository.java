@@ -15,4 +15,12 @@ public class InMemoryRepository {
         totalCount.addAndGet(order.getProductCount());
         totalPrice.addAndGet(order.getTotalPrice());
     }
+
+    public long getTotalPrice() {
+        return totalPrice.get();
+    }
+
+    public long getTotalCount() {
+        return totalCount.get();
+    }
 }
