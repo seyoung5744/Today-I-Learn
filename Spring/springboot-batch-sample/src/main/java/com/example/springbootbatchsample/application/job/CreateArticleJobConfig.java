@@ -16,8 +16,6 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.RepositoryItemWriter;
-import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +32,7 @@ import java.time.LocalDateTime;
 public class CreateArticleJobConfig {
 
     private final ArticleRepository articleRepository;
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate testJdbcTemplate;
     private final CreateArticleJobParam createArticleJobParam;
 
     @Bean
@@ -59,7 +57,6 @@ public class CreateArticleJobConfig {
     @Bean
     @StepScope
     public FlatFileItemReader<ArticleModel> createArticleReader() {
-        log.info("PARAM!!!! {}", createArticleJobParam.getName());
         return new FlatFileItemReaderBuilder<ArticleModel>()
                 .name("createArticleReader")
                 .resource(new ClassPathResource("Articles.csv"))
@@ -80,16 +77,16 @@ public class CreateArticleJobConfig {
                 .build();
     }
 
-    @Bean
-    public RepositoryItemWriter<Article> createArticleRepositoryWriter() {
-        return new RepositoryItemWriterBuilder<Article>()
-                .repository(articleRepository)
-                .build();
-    }
+//    @Bean
+//    public RepositoryItemWriter<Article> createArticleRepositoryWriter() {
+//        return new RepositoryItemWriterBuilder<Article>()
+//                .repository(articleRepository)
+//                .build();
+//    }
 
     @Bean
     public ItemWriter<Article> createArticleWriter() {
-        return articles -> jdbcTemplate.batchUpdate("insert into article (title,content,created_at) values (?,?,?)",
+        return articles -> testJdbcTemplate.batchUpdate("insert into article (title,content,created_at) values (?,?,?)",
                 articles.getItems(),
                 1000,
                 (ps, article) -> {
