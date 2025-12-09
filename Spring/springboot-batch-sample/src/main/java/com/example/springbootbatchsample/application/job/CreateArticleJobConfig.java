@@ -12,16 +12,16 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.data.RepositoryItemWriter;
-import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @Configuration
@@ -30,7 +30,7 @@ public class CreateArticleJobConfig {
 
     private final ArticleRepository articleRepository;
     private final JdbcTemplate jdbcTemplate;
-    
+
     @Bean
     public Job createArticleJob(JobRepository jobRepository, Step createArticleStep) {
         return new JobBuilder("createArticleJob", jobRepository)
@@ -42,7 +42,7 @@ public class CreateArticleJobConfig {
     @Bean
     public Step createArticleStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
         return new StepBuilder("createArticleStep", jobRepository)
-                .<ArticleModel, Article>chunk(100, platformTransactionManager)
+                .<ArticleModel, Article>chunk(1000, platformTransactionManager)
                 .reader(createArticleReader())
                 .processor(createArticleProcessor())
                 .writer(createArticleWriter())
@@ -64,16 +64,25 @@ public class CreateArticleJobConfig {
 
     @Bean
     public ItemProcessor<ArticleModel, Article> createArticleProcessor() {
+        LocalDateTime now = LocalDateTime.now();
         return articleModel -> Article.builder()
                 .title(articleModel.getTitle())
                 .content(articleModel.getContent())
+                .createdAt(now)
                 .build();
     }
 
     @Bean
-    public RepositoryItemWriter<Article> createArticleWriter() {
-        return new RepositoryItemWriterBuilder<Article>()
-                .repository(articleRepository)
-                .build();
+    public ItemWriter<Article> createArticleWriter() {
+        return articles -> jdbcTemplate.batchUpdate("insert into article (title,content,created_at) values (?,?,?)",
+                articles.getItems(),
+                1000,
+                (ps, article) -> {
+                    ps.setObject(1, article.getTitle());
+                    ps.setObject(2, article.getContent());
+                    ps.setObject(3, article.getCreatedAt());
+                }
+        );
+
     }
 }
