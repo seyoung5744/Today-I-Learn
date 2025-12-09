@@ -1,5 +1,6 @@
 package com.example.springbootbatchsample.application.job;
 
+import com.example.springbootbatchsample.application.job.param.CreateArticleJobParam;
 import com.example.springbootbatchsample.application.model.ArticleModel;
 import com.example.springbootbatchsample.domain.entity.Article;
 import com.example.springbootbatchsample.domain.repository.ArticleRepository;
@@ -7,12 +8,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.JobScope;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.data.RepositoryItemWriter;
+import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +35,7 @@ public class CreateArticleJobConfig {
 
     private final ArticleRepository articleRepository;
     private final JdbcTemplate jdbcTemplate;
+    private final CreateArticleJobParam createArticleJobParam;
 
     @Bean
     public Job createArticleJob(JobRepository jobRepository, Step createArticleStep) {
@@ -40,6 +46,7 @@ public class CreateArticleJobConfig {
     }
 
     @Bean
+    @JobScope
     public Step createArticleStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
         return new StepBuilder("createArticleStep", jobRepository)
                 .<ArticleModel, Article>chunk(1000, platformTransactionManager)
@@ -50,13 +57,14 @@ public class CreateArticleJobConfig {
     }
 
     @Bean
+    @StepScope
     public FlatFileItemReader<ArticleModel> createArticleReader() {
+        log.info("PARAM!!!! {}", createArticleJobParam.getName());
         return new FlatFileItemReaderBuilder<ArticleModel>()
                 .name("createArticleReader")
                 .resource(new ClassPathResource("Articles.csv"))
                 .delimited()
                 .names("title", "content")
-//                .fieldSetMapper(new BeanWrapperFieldSetMapper<>())
                 .targetType(ArticleModel.class)
                 .beanMapperStrict(true)
                 .build();
@@ -69,6 +77,13 @@ public class CreateArticleJobConfig {
                 .title(articleModel.getTitle())
                 .content(articleModel.getContent())
                 .createdAt(now)
+                .build();
+    }
+
+    @Bean
+    public RepositoryItemWriter<Article> createArticleRepositoryWriter() {
+        return new RepositoryItemWriterBuilder<Article>()
+                .repository(articleRepository)
                 .build();
     }
 
