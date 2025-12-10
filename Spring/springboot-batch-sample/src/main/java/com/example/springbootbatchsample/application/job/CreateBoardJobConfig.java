@@ -50,6 +50,7 @@ public class CreateBoardJobConfig {
     @Bean
     public Job createBoardeJob(JobRepository jobRepository, Step createBoardManager) {
         return new JobBuilder("createBoardJob", jobRepository)
+                .incrementer(new RunIdIncrementer())
                 .start(createBoardManager)
                 .build();
     }
