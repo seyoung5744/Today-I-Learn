@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    hikari:
+      batch:
+        jdbc-url: jdbc:mysql://localhost:3306/batch
+        username: root
+        password: won9975744
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      test:
+        jdbc-url: jdbc:mysql://localhost:3306/test?rewriteBatchedStatements=true
+        username: root
+        password: won9975744
+        driver-class-name: com.mysql.cj.jdbc.Driver
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      name: ${job.name:NONE}
+      enabled: false
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    #      naming:
+    #        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+logging:
+  level:
+    root: info
+#    org.springframework.jdbc.core: DEBUG
