@@ -52,7 +52,7 @@ public class TestDataManagerConfig {
 
     private Properties testJpaProperties() {
         Properties properties = new Properties();
-        properties.setProperty(AvailableSettings.HBM2DDL_AUTO, "create");
+        properties.setProperty(AvailableSettings.HBM2DDL_AUTO, "update");
         properties.setProperty(AvailableSettings.ALLOW_UPDATE_OUTSIDE_TRANSACTION, "true");
 
         // ★ Java camelCase → SQL snake_case 변환
