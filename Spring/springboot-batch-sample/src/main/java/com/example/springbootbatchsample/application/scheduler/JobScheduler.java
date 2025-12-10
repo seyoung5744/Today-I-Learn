@@ -11,7 +11,7 @@ public class JobScheduler {
 
     private final JobService jobService;
 
-    @Scheduled(fixedDelay = 5000)
+//    @Scheduled(fixedDelay = 5000)
     public void createArticleJob() throws Exception {
         jobService.runCreateArticleJob();
     }

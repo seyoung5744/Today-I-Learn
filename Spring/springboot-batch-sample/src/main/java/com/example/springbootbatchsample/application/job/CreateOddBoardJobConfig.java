@@ -11,25 +11,20 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.partition.support.Partitioner;
-import org.springframework.batch.core.partition.support.TaskExecutorPartitionHandler;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -46,93 +41,33 @@ public class CreateOddBoardJobConfig {
     private final BoardRepository boardRepository;
 
     @Bean
-    public Job createOddBoardJob(JobRepository jobRepository, Step createOddBoardManager) {
+    public Job createOddBoardJob(JobRepository jobRepository, Step createOddBoardStep) {
         return new JobBuilder("createOddBoardJob", jobRepository)
-                .incrementer(new RunIdIncrementer())
-                .start(createOddBoardManager)
+                .start(createOddBoardStep)
                 .build();
     }
 
     @Bean
-    public Step createOddBoardManager(JobRepository jobRepository, Step createOddBoardWorker) {
-        return new StepBuilder("createOddBoardManager", jobRepository)
-                .partitioner("createOddBoardPartitioner", createOddBoardPartitioner())
-                .partitionHandler(createOddBoardPartitionHandler(createOddBoardWorker))
-                .build();
-    }
-
-    @Bean
-    @StepScope
-    public Partitioner createOddBoardPartitioner() {
-        return gridSize -> {
-            long min = createOddBoardJobParam.getMinId();
-            long max = createOddBoardJobParam.getMaxId();
-            long targetSize = (max - min) / gridSize + 1;
-
-            Map<String, ExecutionContext> result = new HashMap<>();
-            int number = 0;
-            long start = min;
-            long end = start + targetSize - 1;
-
-            while (start <= max) {
-                ExecutionContext value = new ExecutionContext();
-                result.put("partition" + number, value);
-
-                if (end >= max) {
-                    end = max;
-                }
-                value.putLong("minValue", start);
-                value.putLong("maxValue", end);
-                start += targetSize;
-                end += targetSize;
-                number++;
-            }
-
-            return result;
-        };
-    }
-
-    @Bean
-    public ThreadPoolTaskExecutor createOddBoardTaskExecutor() {
-        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-
-        taskExecutor.setCorePoolSize(POOL_SIZE);
-        taskExecutor.setMaxPoolSize(POOL_SIZE);
-        taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
-        taskExecutor.initialize();
-        return taskExecutor;
-    }
-
-    @Bean
-    public TaskExecutorPartitionHandler createOddBoardPartitionHandler(Step createOddBoardWorker) {
-        TaskExecutorPartitionHandler partitionHandler = new TaskExecutorPartitionHandler();
-        partitionHandler.setStep(createOddBoardWorker); // worker setting
-        partitionHandler.setGridSize(GRID_SIZE);
-        partitionHandler.setTaskExecutor(createOddBoardTaskExecutor());
-        return partitionHandler;
-    }
-
-    @Bean
-    public Step createOddBoardWorker(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
-        return new StepBuilder("createOddBoardWorker", jobRepository)
+    public Step createOddBoardStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
+        return new StepBuilder("createOddBoardStep", jobRepository)
                 .<Board, OddBoard>chunk(CHUNK_SIZE, platformTransactionManager)
-                .reader(createOddBoardReader(null, null))
+                .reader(createOddBoardReader())
                 .processor(createOddBoardProcessor())
                 .writer(createOddBoardWriter())
+                .faultTolerant()
+                .skipLimit(5)
+                .skip(DuplicateKeyException.class)
                 .build();
     }
 
     @Bean
     @StepScope
-    public RepositoryItemReader<Board> createOddBoardReader(
-            @Value("#{stepExecutionContext[minValue]}") Long minValue,
-            @Value("#{stepExecutionContext[maxValue]}") Long maxValue
-    ) {
+    public RepositoryItemReader<Board> createOddBoardReader() {
         return new RepositoryItemReaderBuilder<Board>()
                 .name("createBoardReader")
                 .repository(boardRepository)
                 .methodName("findAllByIdBetween")
-                .arguments(minValue, maxValue)
+                .arguments(createOddBoardJobParam.getMinId(), createOddBoardJobParam.getMaxId())
                 .pageSize(CHUNK_SIZE)
                 .sorts(Map.of("id", Sort.Direction.ASC))
                 .build();

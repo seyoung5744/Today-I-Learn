@@ -11,7 +11,6 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
@@ -38,7 +37,6 @@ public class CreateArticleJobConfig {
     @Bean
     public Job createArticleJob(JobRepository jobRepository, Step createArticleStep) {
         return new JobBuilder("createArticleJob", jobRepository)
-                .incrementer(new RunIdIncrementer())
                 .start(createArticleStep)
                 .build();
     }
@@ -59,7 +57,7 @@ public class CreateArticleJobConfig {
     public FlatFileItemReader<ArticleModel> createArticleReader() {
         return new FlatFileItemReaderBuilder<ArticleModel>()
                 .name("createArticleReader")
-                .resource(new ClassPathResource("Articles.csv"))
+                .resource(new ClassPathResource(createArticleJobParam.getName()))
                 .delimited()
                 .names("title", "content")
                 .targetType(ArticleModel.class)

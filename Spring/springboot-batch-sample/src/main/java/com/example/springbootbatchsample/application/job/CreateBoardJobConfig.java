@@ -9,7 +9,6 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.partition.support.MultiResourcePartitioner;
 import org.springframework.batch.core.partition.support.Partitioner;
 import org.springframework.batch.core.partition.support.TaskExecutorPartitionHandler;
@@ -48,9 +47,8 @@ public class CreateBoardJobConfig {
     private final JdbcTemplate testJdbcTemplate;
 
     @Bean
-    public Job createBoardeJob(JobRepository jobRepository, Step createBoardManager) {
+    public Job createBoardJob(JobRepository jobRepository, Step createBoardManager) {
         return new JobBuilder("createBoardJob", jobRepository)
-                .incrementer(new RunIdIncrementer())
                 .start(createBoardManager)
                 .build();
     }
