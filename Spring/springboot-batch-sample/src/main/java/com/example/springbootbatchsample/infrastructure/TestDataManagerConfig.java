@@ -53,7 +53,14 @@ public class TestDataManagerConfig {
     private Properties testJpaProperties() {
         Properties properties = new Properties();
         properties.setProperty(AvailableSettings.HBM2DDL_AUTO, "create");
-        properties.setProperty(AvailableSettings.ALLOW_UPDATE_OUTSIDE_TRANSACTION, "treu");
+        properties.setProperty(AvailableSettings.ALLOW_UPDATE_OUTSIDE_TRANSACTION, "true");
+
+        // ★ Java camelCase → SQL snake_case 변환
+        properties.setProperty(AvailableSettings.PHYSICAL_NAMING_STRATEGY,
+                "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
+
+        properties.setProperty(AvailableSettings.IMPLICIT_NAMING_STRATEGY,
+                "org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy");
         return properties;
     }
 }
