@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -24,5 +25,12 @@ public class Board {
 
     private String content;
 
+    @ColumnDefault(value = "false")
+    private boolean isDeleted;
+
     private LocalDateTime createdAt;
+
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 }
