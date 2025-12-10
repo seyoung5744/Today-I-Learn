@@ -9,21 +9,27 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.annotation.BeforeStep;
+import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.Chunk;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.RepositoryItemReader;
-import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
-import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -43,25 +49,26 @@ public class HardDeleteBoardJobConfig {
     @Bean
     public Job hardDeleteBoardJob() {
         return new JobBuilder("hardDeleteBoardJob", jobRepository)
-                .start(hardDeleteBoardStep())
+                .start(backupBoardStep())
+                .next(hardDeleteBoardStep())
                 .build();
     }
 
     @Bean
-    public Step hardDeleteBoardStep() {
+    public Step backupBoardStep() {
         return new StepBuilder("hardDeleteBoardStep", jobRepository)
                 .<Board, DeletedBoard>chunk(CHUNK_SIZE, platformTransactionManager)
-                .reader(hardDeleteBoardReader())
-                .processor(hardDeleteBoardProcessor())
-                .writer(hardDeleteBoardWriter())
+                .reader(backupBoardReader())
+                .processor(backupBoardProcessor())
+                .writer(backupBoardWriter())
                 .build();
     }
 
     @Bean
     @StepScope
-    public RepositoryItemReader<Board> hardDeleteBoardReader() {
+    public RepositoryItemReader<Board> backupBoardReader() {
         return new RepositoryItemReaderBuilder<Board>()
-                .name("hardDeleteBoardReader")
+                .name("backupBoardReader")
                 .repository(boardRepository)
                 .methodName("findAllByCreatedAtBefore")
                 .arguments(hardDeleteBoardJobParam.getCreatedAt())
@@ -71,7 +78,7 @@ public class HardDeleteBoardJobConfig {
     }
 
     @Bean
-    public ItemProcessor<Board, DeletedBoard> hardDeleteBoardProcessor() {
+    public ItemProcessor<Board, DeletedBoard> backupBoardProcessor() {
         LocalDateTime now = LocalDateTime.now();
         return board -> DeletedBoard.builder()
                 .id(board.getId())
@@ -84,9 +91,38 @@ public class HardDeleteBoardJobConfig {
     }
 
     @Bean
-    public RepositoryItemWriter<DeletedBoard> hardDeleteBoardWriter() {
-        return new RepositoryItemWriterBuilder<DeletedBoard>()
-                .repository(deletedBoardRepository)
+    public ItemWriter<DeletedBoard> backupBoardWriter() {
+        return new ItemWriter<DeletedBoard>() {
+
+            private StepExecution stepExecution;
+
+            @Override
+            public void write(Chunk<? extends DeletedBoard> deletedBoardChunk) throws Exception {
+                List<? extends DeletedBoard> targetBoards = deletedBoardChunk.getItems();
+                List<Long> deleteBoardIds = deletedBoardRepository.saveAll(targetBoards).stream()
+                        .map(DeletedBoard::getId)
+                        .toList();
+                ExecutionContext executionContext = this.stepExecution.getJobExecution().getExecutionContext();
+                executionContext.put("deleteBoardIds", deleteBoardIds);
+            }
+
+            @BeforeStep
+            public void setStepExecution(final StepExecution stepExecution) {
+                this.stepExecution = stepExecution;
+            }
+        };
+    }
+
+    @Bean
+    @JobScope
+    public Step hardDeleteBoardStep() {
+        return new StepBuilder("hardDeleteBoardStep", jobRepository)
+                .tasklet((contribution, chunkContext) -> {
+                    Map<String, Object> jobExecutionContext = chunkContext.getStepContext().getJobExecutionContext();
+                    List<Long> deleteBoardIds = (List<Long>) jobExecutionContext.get("deleteBoardIds");
+                    boardRepository.deleteAllByIdIn(deleteBoardIds);
+                    return RepeatStatus.FINISHED;
+                }, platformTransactionManager)
                 .build();
     }
 }
