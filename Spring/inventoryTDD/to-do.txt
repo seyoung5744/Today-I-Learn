@@ -1,0 +1,20 @@
+-- TO-DO --
+InventoryHelper -> Inventory 의 capacity 를 수정한다.
+InventoryHelper -> Inventory 의 size 를 수정한다.
+
+
+
+-- DONE --
+Inventory의 크기를 알 수 있어야 한다.
+Inventory의 타입을 알 수 있어야 한다.
+총 저장 수량을 알 수 있어야 한다.
+현재 저장된 수량을 알 수 있어야 한다.
+앞으로 저장 가능한 수량을 알 수 있어야 한다.
+Inventory Type을 Enum으로 만들기.
+InventoryHelper 클래스 생성.
+InventoryHelper 클래스에서 사용 가능한 용량을 알아낸다.
+InventoryHelper -> 입고를 시킨다.
+입고 가능한지 여부를 확인한다.
+InventoryHelper -> capacity 이상으로 입고를 방지한다.
+InventoryHelper -> Inventory 를 생성한다.
+
