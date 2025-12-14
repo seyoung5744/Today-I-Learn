@@ -1,6 +1,5 @@
 package com.example.zipkindemo.backend;
 
-import io.micrometer.tracing.annotation.NewSpan;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,7 @@ public class BackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class,
-                "--spring.application.name=backend",
-                "--server.port=8081");
+                "--spring.profiles.active=back");
     }
 
     @Slf4j
@@ -32,6 +30,10 @@ public class BackendApplication {
 
         @GetMapping("/order/{orderNumber}")
         public String order(@PathVariable Integer orderNumber) {
+//            long time = System.nanoTime();
+//            if (time % 10 < 3) {
+//                throw new RuntimeException("error");
+//            }
             log.info("controller : {}", orderNumber);
             paymentService.payment(orderNumber * 10);
             return "OK " + orderNumber;
@@ -43,7 +45,6 @@ public class BackendApplication {
     static class BackendPaymentService {
 
         @SneakyThrows
-        @NewSpan
         public void payment(Integer price) {
             TimeUnit.MICROSECONDS.sleep(new Random().nextInt(500) + 100);
             log.info("payment approved : {}", price);
