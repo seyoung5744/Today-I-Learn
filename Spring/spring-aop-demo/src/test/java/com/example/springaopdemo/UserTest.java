@@ -23,10 +23,7 @@ class UserTest {
 
         Store store = new Store();
 
-        // when
+        // when & then
         user.visitTo(store);
-
-        // then
-
     }
 }
