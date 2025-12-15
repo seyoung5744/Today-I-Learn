@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.18
+    container_name: elasticsearch-for-trace
+    environment:
+    - discovery.type=single-node
+    - xpack.security.enabled=false
+    - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    networks:
+      - zipkin-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.18
+    container_name: kibana-for-trace
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - zipkin-net
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin
+    depends_on:
+      - elasticsearch
+    environment:
+      - STORAGE_TYPE=elasticsearch
+      - ES_HOSTS=http://elasticsearch:9200
+    ports:
+      - "9411:9411"
+    networks:
+      - zipkin-net
+
+
+networks:
+  zipkin-net:
+    driver: bridge
