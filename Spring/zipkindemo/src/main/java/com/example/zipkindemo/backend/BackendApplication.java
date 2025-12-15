@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
@@ -32,12 +34,8 @@ public class BackendApplication {
 
         @GetMapping("/order/{orderNumber}")
         public String order(@PathVariable Integer orderNumber) {
-            long time = System.nanoTime();
-//            if (time % 10 < 3) {
-//                throw new RuntimeException("error");
-//            }
             log.info("controller : {}", orderNumber);
-            paymentService.payment(time, orderNumber * 10);
+            paymentService.payment(orderNumber * 10);
             return "OK " + orderNumber;
         }
     }
@@ -49,21 +47,34 @@ public class BackendApplication {
         @Autowired
         private Tracer tracer;
 
+        private ExecutorService executorService = Executors.newFixedThreadPool(10);
+
         public BackendPaymentService(Tracer tracer) {
             this.tracer = tracer;
         }
 
         @SneakyThrows
-        public void payment(long time, Integer price) {
-            Span span = tracer.nextSpan().name("backendPayment");
-            try (Tracer.SpanInScope ws = tracer.withSpan(span.start())) {
-                span.tag("payment-price", price);
+        public void payment(Integer price) {
+            Span parent = tracer.nextSpan().name("backendPayment");
+            try (Tracer.SpanInScope ws = tracer.withSpan(parent.start())) {
+                parent.tag("payment-price", price);
 
-                TimeUnit.MICROSECONDS.sleep(new Random().nextInt(500) + 100);
-                log.info("{}: payment approved : {}", time, price);
-
+                executorService.submit(new Runnable() {
+                    @SneakyThrows
+                    @Override
+                    public void run() {
+                        Span span2 = tracer.nextSpan(parent).name("runnable");
+                        try (Tracer.SpanInScope ws = tracer.withSpan(span2.start())) {
+                            TimeUnit.MICROSECONDS.sleep(new Random().nextInt(500) + 100);
+                            log.info("async approve : {}", price);
+                        } finally {
+                            span2.end();
+                        }
+                    }
+                });
+                log.info("approved");
             } finally {
-                span.end();
+                parent.end();
             }
         }
     }
