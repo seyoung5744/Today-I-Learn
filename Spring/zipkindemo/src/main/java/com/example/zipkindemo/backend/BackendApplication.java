@@ -1,5 +1,7 @@
 package com.example.zipkindemo.backend;
 
+import io.micrometer.tracing.Span;
+import io.micrometer.tracing.Tracer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +32,12 @@ public class BackendApplication {
 
         @GetMapping("/order/{orderNumber}")
         public String order(@PathVariable Integer orderNumber) {
-//            long time = System.nanoTime();
+            long time = System.nanoTime();
 //            if (time % 10 < 3) {
 //                throw new RuntimeException("error");
 //            }
             log.info("controller : {}", orderNumber);
-            paymentService.payment(orderNumber * 10);
+            paymentService.payment(time, orderNumber * 10);
             return "OK " + orderNumber;
         }
     }
@@ -44,10 +46,25 @@ public class BackendApplication {
     @Service
     static class BackendPaymentService {
 
+        @Autowired
+        private Tracer tracer;
+
+        public BackendPaymentService(Tracer tracer) {
+            this.tracer = tracer;
+        }
+
         @SneakyThrows
-        public void payment(Integer price) {
-            TimeUnit.MICROSECONDS.sleep(new Random().nextInt(500) + 100);
-            log.info("payment approved : {}", price);
+        public void payment(long time, Integer price) {
+            Span span = tracer.nextSpan().name("backendPayment");
+            try (Tracer.SpanInScope ws = tracer.withSpan(span.start())) {
+                span.tag("payment-price", price);
+
+                TimeUnit.MICROSECONDS.sleep(new Random().nextInt(500) + 100);
+                log.info("{}: payment approved : {}", time, price);
+
+            } finally {
+                span.end();
+            }
         }
     }
 }
