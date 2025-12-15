@@ -4,19 +4,19 @@ import io.micrometer.tracing.Span;
 import io.micrometer.tracing.Tracer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
+@EnableKafka
 @SpringBootApplication
 public class BackendApplication {
 
@@ -47,7 +47,8 @@ public class BackendApplication {
         @Autowired
         private Tracer tracer;
 
-        private ExecutorService executorService = Executors.newFixedThreadPool(10);
+        @Autowired
+        private KafkaTemplate<String, String> kafkaTemplate;
 
         public BackendPaymentService(Tracer tracer) {
             this.tracer = tracer;
@@ -55,27 +56,19 @@ public class BackendApplication {
 
         @SneakyThrows
         public void payment(Integer price) {
-            Span parent = tracer.nextSpan().name("backendPayment");
-            try (Tracer.SpanInScope ws = tracer.withSpan(parent.start())) {
-                parent.tag("payment-price", price);
+//            Span parent = tracer.nextSpan().name("backendPayment");
+//            try (Tracer.SpanInScope ws = tracer.withSpan(parent.start())) {
+                kafkaTemplate.send("backend", price + "원이 결제 요청됩니다.");
 
-                executorService.submit(new Runnable() {
-                    @SneakyThrows
-                    @Override
-                    public void run() {
-                        Span span2 = tracer.nextSpan(parent).name("runnable");
-                        try (Tracer.SpanInScope ws = tracer.withSpan(span2.start())) {
-                            TimeUnit.MICROSECONDS.sleep(new Random().nextInt(500) + 100);
-                            log.info("async approve : {}", price);
-                        } finally {
-                            span2.end();
-                        }
-                    }
-                });
-                log.info("approved");
-            } finally {
-                parent.end();
-            }
+//                log.info("approved");
+//            } finally {
+//                parent.end();
+//            }
+        }
+
+        @KafkaListener(topics = "backend", groupId = "backend-c1")
+        public void consume(ConsumerRecord<String, String> record) {
+            log.info("consume : {} 그리고 결제 완료!", record.value());
         }
     }
 }
