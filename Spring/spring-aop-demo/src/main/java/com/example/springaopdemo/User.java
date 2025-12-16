@@ -14,6 +14,11 @@ public class User {
         store.visitedBy(this);
     }
 
+    public void visitTo(Library library) {
+        // store에 user 방문을 알림.
+        library.visitedBy(this);
+    }
+
     public String getName() {
         return name;
     }
