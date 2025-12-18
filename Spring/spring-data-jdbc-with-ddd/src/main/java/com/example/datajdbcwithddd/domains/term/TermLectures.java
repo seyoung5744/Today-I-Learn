@@ -1,8 +1,12 @@
 package com.example.datajdbcwithddd.domains.term;
 
-public record TermLectures(Long lecture) {
+import com.example.datajdbcwithddd.domains.lecture.LectureId;
 
-    public static TermLectures of(Long lecture) {
+public record TermLectures(
+        LectureId lecture
+) {
+
+    public static TermLectures of(LectureId lecture) {
         return new TermLectures(lecture);
     }
 }

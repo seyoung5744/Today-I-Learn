@@ -9,11 +9,13 @@ import java.util.List;
 @Configuration
 public class DataJdbcConfig extends AbstractJdbcConfiguration {
 
-//    @Override
-//    protected List<?> userConverters() {
-//        return List.of(
+    @Override
+    protected List<?> userConverters() {
+        return List.of(
 //                Converts.StringToTerm.INSTANCE,
 //                Converts.TermToString.INSTANCE
-//        );
-//    }
+                Converts.LectureIdToLong.INSTANCE,
+                Converts.LongToLectureId.INSTANCE
+        );
+    }
 }

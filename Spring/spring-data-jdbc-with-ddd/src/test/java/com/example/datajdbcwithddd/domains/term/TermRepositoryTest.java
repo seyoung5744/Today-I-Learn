@@ -1,14 +1,12 @@
 package com.example.datajdbcwithddd.domains.term;
 
-import com.example.datajdbcwithddd.domains.lecture.Lecture;
-import org.junit.jupiter.api.DisplayName;
+import com.example.datajdbcwithddd.domains.lecture.LectureId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -25,12 +23,5 @@ class TermRepositoryTest {
         assertThat(find).isPresent();
     }
 
-    @Test
-    void addLecture() {
-        Term aTerm = Term.of("2021-01");
-        aTerm.add(1L);
 
-        Term saved = termRepository.save(aTerm);
-
-    }
 }

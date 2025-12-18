@@ -15,7 +15,7 @@ import org.springframework.data.annotation.PersistenceCreator;
 public class Lecture {
 
     @Id
-    private Long id;
+    private LectureId id;
 
     private final String name;
     private final String term;
