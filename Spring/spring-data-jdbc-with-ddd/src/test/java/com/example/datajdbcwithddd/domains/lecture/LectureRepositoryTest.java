@@ -1,5 +1,6 @@
 package com.example.datajdbcwithddd.domains.lecture;
 
+import com.example.datajdbcwithddd.domains.term.Term;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,7 @@ class LectureRepositoryTest {
     @Test
     void saveAndFind() {
 
-        Lecture aLecture = Lecture.create("Spring Data Jdbc", "2021 Q2");
+        Lecture aLecture = Lecture.create("Spring Data Jdbc", Term.of("2021 Q2"));
 
         Lecture saved = lectureRepository.save(aLecture);
 

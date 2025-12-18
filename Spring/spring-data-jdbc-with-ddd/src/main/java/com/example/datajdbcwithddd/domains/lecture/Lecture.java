@@ -1,6 +1,7 @@
 package com.example.datajdbcwithddd.domains.lecture;
 
 
+import com.example.datajdbcwithddd.domains.term.Term;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,9 +18,14 @@ public class Lecture {
     private Long id;
 
     private final String name;
-    private final String term;
+    private final Term term;
 
+    @Deprecated
     public static Lecture create(String name, String term) {
+        return create(name, Term.of(term));
+    }
+
+    public static Lecture create(String name, Term term) {
         return new Lecture(name, term);
     }
 }
