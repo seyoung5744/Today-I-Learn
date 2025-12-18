@@ -18,14 +18,9 @@ public class Lecture {
     private Long id;
 
     private final String name;
-    private final Term term;
-
-    @Deprecated
-    public static Lecture create(String name, String term) {
-        return create(name, Term.of(term));
-    }
+    private final String term;
 
     public static Lecture create(String name, Term term) {
-        return new Lecture(name, term);
+        return new Lecture(name, term.getName());
     }
 }

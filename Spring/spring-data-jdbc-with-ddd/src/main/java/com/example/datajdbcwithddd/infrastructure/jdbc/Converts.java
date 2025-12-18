@@ -13,7 +13,7 @@ public final class Converts {
 
         @Override
         public String convert(Term source) {
-            return source.name();
+            return source.getName();
         }
     }
 

@@ -9,11 +9,11 @@ import java.util.List;
 @Configuration
 public class DataJdbcConfig extends AbstractJdbcConfiguration {
 
-    @Override
-    protected List<?> userConverters() {
-        return List.of(
-                Converts.StringToTerm.INSTANCE,
-                Converts.TermToString.INSTANCE
-        );
-    }
+//    @Override
+//    protected List<?> userConverters() {
+//        return List.of(
+//                Converts.StringToTerm.INSTANCE,
+//                Converts.TermToString.INSTANCE
+//        );
+//    }
 }
