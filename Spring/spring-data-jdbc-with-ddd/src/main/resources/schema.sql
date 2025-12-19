@@ -18,3 +18,13 @@ create table term_lectures (
     term bigint,
     lecture bigint
 );
+
+create table registration (
+    lecture bigint,
+    student bigint
+);
+
+create table student (
+    id   bigint auto_increment primary key,
+    name varchar(100)
+);

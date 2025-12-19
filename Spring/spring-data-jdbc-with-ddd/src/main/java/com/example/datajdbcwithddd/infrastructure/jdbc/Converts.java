@@ -1,6 +1,7 @@
 package com.example.datajdbcwithddd.infrastructure.jdbc;
 
 import com.example.datajdbcwithddd.domains.lecture.LectureId;
+import com.example.datajdbcwithddd.domains.students.StudentId;
 import com.example.datajdbcwithddd.domains.term.TermId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
@@ -65,6 +66,26 @@ public final class Converts {
         @Override
         public TermId convert(Long source) {
             return TermId.of(source);
+        }
+    }
+
+    @WritingConverter
+    public enum StudentIdToLong implements Converter<StudentId, Long> {
+        INSTANCE;
+
+        @Override
+        public Long convert(StudentId source) {
+            return source.id();
+        }
+    }
+
+    @ReadingConverter
+    public enum LongToStudentId implements Converter<Long, StudentId> {
+        INSTANCE;
+
+        @Override
+        public StudentId convert(Long source) {
+            return StudentId.of(source);
         }
     }
 
