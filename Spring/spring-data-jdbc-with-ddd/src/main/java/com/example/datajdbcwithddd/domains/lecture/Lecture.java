@@ -1,13 +1,14 @@
 package com.example.datajdbcwithddd.domains.lecture;
 
 
-import com.example.datajdbcwithddd.domains.term.Term;
+import com.example.datajdbcwithddd.domains.term.TermId;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.annotation.Version;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -17,10 +18,13 @@ public class Lecture {
     @Id
     private LectureId id;
 
-    private final String name;
-    private final String term;
+    @Version
+    private Long version;
 
-    public static Lecture create(String name, Term term) {
-        return new Lecture(name, term.getName());
+    private final String name;
+    private final TermId termId;
+
+    public static Lecture create(CreateLecture command) {
+        return new Lecture(command.lectureId(), null, command.name(), command.termId());
     }
 }

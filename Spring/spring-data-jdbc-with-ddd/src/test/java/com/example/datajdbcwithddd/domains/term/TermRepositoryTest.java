@@ -1,6 +1,5 @@
 package com.example.datajdbcwithddd.domains.term;
 
-import com.example.datajdbcwithddd.domains.lecture.LectureId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

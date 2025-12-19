@@ -1,6 +1,8 @@
 package com.example.datajdbcwithddd.domains.lecture;
 
-import org.springframework.data.repository.CrudRepository;
+public interface LectureRepository {
 
-public interface LectureRepository extends CrudRepository<Lecture, LectureId> {
+    Lecture save(Lecture aLecture);
+
+    Lecture findById(LectureId id);
 }

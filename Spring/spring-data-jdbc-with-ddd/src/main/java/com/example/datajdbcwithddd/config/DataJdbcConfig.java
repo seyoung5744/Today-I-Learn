@@ -15,7 +15,9 @@ public class DataJdbcConfig extends AbstractJdbcConfiguration {
 //                Converts.StringToTerm.INSTANCE,
 //                Converts.TermToString.INSTANCE
                 Converts.LectureIdToLong.INSTANCE,
-                Converts.LongToLectureId.INSTANCE
+                Converts.LongToLectureId.INSTANCE,
+                Converts.TermIdToLong.INSTANCE,
+                Converts.LongToTermId.INSTANCE
         );
     }
 }
