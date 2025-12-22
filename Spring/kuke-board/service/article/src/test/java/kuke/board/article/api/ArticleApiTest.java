@@ -1,4 +1,4 @@
-package board.article.api;
+package kuke.board.article.api;
 
 import kuke.board.article.service.response.ArticleResponse;
 import lombok.AllArgsConstructor;
