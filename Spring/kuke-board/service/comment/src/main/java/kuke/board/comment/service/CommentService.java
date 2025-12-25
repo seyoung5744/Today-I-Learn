@@ -38,7 +38,7 @@ public class CommentService {
             return null;
         }
         return commentRepository.findById(parentCommentId)
-                .filter(not(Comment::getDeleted))
+                .filter(not(Comment::isDeleted))
                 .filter(Comment::isRoot)
                 .orElseThrow();
     }
@@ -52,7 +52,7 @@ public class CommentService {
     @Transactional
     public void delete(Long commentId) {
         commentRepository.findById(commentId)
-                .filter(not(Comment::getDeleted))
+                .filter(not(Comment::isDeleted))
                 .ifPresent(comment -> {
                     if (hasChildren(comment)) {
                         comment.delete(); // 소프트 삭제
@@ -70,7 +70,7 @@ public class CommentService {
         commentRepository.delete(comment);
         if (!comment.isRoot()) {
             commentRepository.findById(comment.getParentCommentId())
-                    .filter(Comment::getDeleted)
+                    .filter(Comment::isDeleted)
                     .filter(not(this::hasChildren))
                     .ifPresent(this::delete);
         }

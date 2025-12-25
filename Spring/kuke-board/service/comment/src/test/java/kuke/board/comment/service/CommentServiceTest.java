@@ -52,7 +52,7 @@ class CommentServiceTest {
         given(comment.isRoot()).willReturn(false);
 
         Comment parentComment = mock(Comment.class);
-        given(parentComment.getDeleted()).willReturn(false);
+        given(parentComment.isDeleted()).willReturn(false);
 
         given(commentRepository.findById(commentId)).willReturn(Optional.of(comment));
         given(commentRepository.countBy(articleId, commentId, 2L)).willReturn(1L);
@@ -80,7 +80,7 @@ class CommentServiceTest {
 
         Comment parentComment = createComment(articleId, parentCommentId);
         given(parentComment.isRoot()).willReturn(true);
-        given(parentComment.getDeleted()).willReturn(true);
+        given(parentComment.isDeleted()).willReturn(true);
 
         given(commentRepository.findById(commentId)).willReturn(Optional.of(comment));
         given(commentRepository.countBy(articleId, commentId, 2L)).willReturn(1L);

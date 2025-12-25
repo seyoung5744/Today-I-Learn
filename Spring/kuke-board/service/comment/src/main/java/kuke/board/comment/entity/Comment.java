@@ -42,6 +42,10 @@ public class Comment {
         return parentCommentId.longValue() == commentId;
     }
 
+    public boolean isDeleted() {
+        return this.deleted;
+    }
+
     public void delete() {
         this.deleted = true;
     }
