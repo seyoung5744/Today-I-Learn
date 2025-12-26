@@ -1,2 +1,18 @@
 server:
   port: 8002
+
+
+spring:
+  application:
+    name: board-like-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/article_like
+    username: root
+    password: won9975744
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
