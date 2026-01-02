@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component
@@ -40,6 +41,6 @@ public class HotArticleScoreUpdater {
 
     // ArticleCreatedTimeRepository 는 자정이란 ttl 기준으로 저장되기 때문에 null 여부 검사
     private boolean isArticleCreatedToday(LocalDateTime createdTime) {
-        return createdTime != null && createdTime.toLocalDate().equals(LocalDateTime.now());
+        return createdTime != null && createdTime.toLocalDate().equals(LocalDate.now());
     }
 }
