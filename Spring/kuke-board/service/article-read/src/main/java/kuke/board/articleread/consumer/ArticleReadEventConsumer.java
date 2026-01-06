@@ -17,6 +17,14 @@ public class ArticleReadEventConsumer {
 
     private final ArticleReadService articleReadService;
 
+    /**
+     * TODO
+     * 컨슈머는 쓰기 트래픽을 처리
+     * 반면 API는 조회 트래픽을 처리
+     * 만약 애플리케이션이 20개 떠있고, 구독한 토픽의 파티션이 5개일 경우
+     * 5개의 컨슈머는 파티션을 처리하고 있지만, 15개의 컨슈머는 파티션을 처리하지 않고 놀고 있음
+     * 따라서, 이런 Kafka 설정에 대한 고민도 필요
+     */
     @KafkaListener(topics = {
             EventType.Topic.BOARD_ARTICLE,
             EventType.Topic.BOARD_COMMENT,
