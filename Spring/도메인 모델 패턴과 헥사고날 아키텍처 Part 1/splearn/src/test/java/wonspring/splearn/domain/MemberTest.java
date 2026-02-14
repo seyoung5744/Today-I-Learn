@@ -3,7 +3,6 @@ package wonspring.splearn.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -25,7 +24,7 @@ class MemberTest {
                 return encode(password).matches(passwordHash);
             }
         };
-        member = Member.create("test@test,com", "test", "secret", passwordEncoder);
+        member = Member.create(new MemberCreateRequest("test@test,com", "test", "secret"), passwordEncoder);
     }
 
     @Test
@@ -95,5 +94,18 @@ class MemberTest {
         member.changePassword("verysecret", passwordEncoder);
 
         assertThat(member.verifyPassword("verysecret", passwordEncoder)).isTrue();
+    }
+
+    @Test
+    void isActive() {
+        assertThat(member.isActive()).isFalse();
+
+        member.activate();
+
+        assertThat(member.isActive()).isTrue();
+
+        member.deactivate();
+
+        assertThat(member.isActive()).isFalse();
     }
 }
