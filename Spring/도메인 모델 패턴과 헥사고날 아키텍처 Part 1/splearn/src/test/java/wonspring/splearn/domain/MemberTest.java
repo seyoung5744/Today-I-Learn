@@ -24,7 +24,7 @@ class MemberTest {
                 return encode(password).matches(passwordHash);
             }
         };
-        member = Member.create(new MemberCreateRequest("test@test,com", "test", "secret"), passwordEncoder);
+        member = Member.create(new MemberCreateRequest("test@test.com", "test", "secret"), passwordEncoder);
     }
 
     @Test
@@ -107,5 +107,14 @@ class MemberTest {
         member.deactivate();
 
         assertThat(member.isActive()).isFalse();
+    }
+
+    @Test
+    void invalidEmail() {
+        assertThatThrownBy(() ->
+                Member.create(new MemberCreateRequest("invalid email", "test", "secret"), passwordEncoder)
+        ).isInstanceOf(IllegalArgumentException.class);
+
+        Member.create(new MemberCreateRequest("test@test.com", "test", "secret"), passwordEncoder);
     }
 }
