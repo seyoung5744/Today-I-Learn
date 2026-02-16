@@ -1,5 +1,6 @@
 package wonspring.splearn.application.provided;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Transactional
 @Import(SplearnTestConfiguration.class)
 //@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
-public record MemberRegisterTest(MemberRegister memberRegister) {
+public record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityManager) {
 
     @Test
     void register() {
@@ -30,6 +31,18 @@ public record MemberRegisterTest(MemberRegister memberRegister) {
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
         assertThatThrownBy(() -> memberRegister.register(MemberFixture.createMemberRegisterRequest()))
                 .isInstanceOf(DuplicateEmailException.class);
+    }
+
+    @Test
+    void activate() {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        entityManager.flush();
+        entityManager.clear();
+
+        member = memberRegister.activate(member.getId());
+        entityManager.flush();
+
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
     }
 
     @Test
