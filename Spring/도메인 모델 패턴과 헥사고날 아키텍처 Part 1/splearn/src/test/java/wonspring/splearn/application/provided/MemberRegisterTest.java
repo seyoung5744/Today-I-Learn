@@ -1,15 +1,12 @@
 package wonspring.splearn.application.provided;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestConstructor;
 import wonspring.splearn.SplearnTestConfiguration;
-import wonspring.splearn.domain.DuplicateEmailException;
-import wonspring.splearn.domain.Member;
-import wonspring.splearn.domain.MemberFixture;
-import wonspring.splearn.domain.MemberStatus;
+import wonspring.splearn.domain.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,5 +30,17 @@ public record MemberRegisterTest(MemberRegister memberRegister) {
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
         assertThatThrownBy(() -> memberRegister.register(MemberFixture.createMemberRegisterRequest()))
                 .isInstanceOf(DuplicateEmailException.class);
+    }
+
+    @Test
+    void memberRegisterRequestFail() {
+        extracted(new MemberRegisterRequest("test@test.com", "test", "longsecret"));
+        extracted(new MemberRegisterRequest("test@test.com", "Charlie______________", "longsecret"));
+        extracted(new MemberRegisterRequest("testtest.com", "Charlie", "longsecret"));
+    }
+
+    private void extracted(MemberRegisterRequest invalid) {
+        assertThatThrownBy(() -> memberRegister.register(invalid))
+                .isInstanceOf(ConstraintViolationException.class);
     }
 }

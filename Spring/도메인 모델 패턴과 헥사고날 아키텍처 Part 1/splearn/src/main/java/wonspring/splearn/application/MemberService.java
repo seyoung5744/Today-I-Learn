@@ -1,13 +1,17 @@
 package wonspring.splearn.application;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import wonspring.splearn.application.provided.MemberRegister;
 import wonspring.splearn.application.required.EmailSender;
 import wonspring.splearn.application.required.MemberRepository;
 import wonspring.splearn.domain.*;
 
 @Service
+@Transactional
+@Validated
 @RequiredArgsConstructor
 public class MemberService implements MemberRegister {
 

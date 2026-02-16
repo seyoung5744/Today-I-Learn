@@ -1,5 +1,6 @@
 package wonspring.splearn.application.provided;
 
+import jakarta.validation.Valid;
 import wonspring.splearn.domain.Member;
 import wonspring.splearn.domain.MemberRegisterRequest;
 
@@ -8,5 +9,5 @@ import wonspring.splearn.domain.MemberRegisterRequest;
  */
 public interface MemberRegister {
 
-    Member register(MemberRegisterRequest registerRequest);
+    Member register(@Valid MemberRegisterRequest registerRequest);
 }
