@@ -47,12 +47,12 @@ record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityMan
 
     @Test
     void memberRegisterRequestFail() {
-        extracted(new MemberRegisterRequest("test@test.com", "test", "longsecret"));
-        extracted(new MemberRegisterRequest("test@test.com", "Charlie______________", "longsecret"));
-        extracted(new MemberRegisterRequest("testtest.com", "Charlie", "longsecret"));
+        checkValidation(new MemberRegisterRequest("test@test.com", "test", "longsecret"));
+        checkValidation(new MemberRegisterRequest("test@test.com", "Charlie______________", "longsecret"));
+        checkValidation(new MemberRegisterRequest("testtest.com", "Charlie", "longsecret"));
     }
 
-    private void extracted(MemberRegisterRequest invalid) {
+    private void checkValidation(MemberRegisterRequest invalid) {
         assertThatThrownBy(() -> memberRegister.register(invalid))
                 .isInstanceOf(ConstraintViolationException.class);
     }
