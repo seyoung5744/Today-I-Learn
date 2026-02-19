@@ -2,7 +2,7 @@ package wonspring.splearn.adapter.security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import wonspring.splearn.domain.PasswordEncoder;
+import wonspring.splearn.domain.member.PasswordEncoder;
 
 @Component
 public class SecurePasswordEncoder implements PasswordEncoder {

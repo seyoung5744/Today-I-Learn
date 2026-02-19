@@ -1,6 +1,6 @@
-package wonspring.splearn.application.provided;
+package wonspring.splearn.application.member.provided;
 
-import wonspring.splearn.domain.Member;
+import wonspring.splearn.domain.member.Member;
 
 /**
  * 회원을 조회한다.

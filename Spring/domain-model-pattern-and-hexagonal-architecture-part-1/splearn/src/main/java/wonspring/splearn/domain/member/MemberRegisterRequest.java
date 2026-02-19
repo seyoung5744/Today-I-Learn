@@ -1,4 +1,4 @@
-package wonspring.splearn.domain;
+package wonspring.splearn.domain.member;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;

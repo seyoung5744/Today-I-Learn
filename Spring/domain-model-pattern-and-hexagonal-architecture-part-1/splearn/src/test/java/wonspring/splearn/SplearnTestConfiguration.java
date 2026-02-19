@@ -2,9 +2,9 @@ package wonspring.splearn;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import wonspring.splearn.application.required.EmailSender;
-import wonspring.splearn.domain.MemberFixture;
-import wonspring.splearn.domain.PasswordEncoder;
+import wonspring.splearn.application.member.required.EmailSender;
+import wonspring.splearn.domain.member.MemberFixture;
+import wonspring.splearn.domain.member.PasswordEncoder;
 
 @TestConfiguration
 public class SplearnTestConfiguration {

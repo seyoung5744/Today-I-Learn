@@ -1,6 +1,6 @@
-package wonspring.splearn.application.required;
+package wonspring.splearn.application.member.required;
 
-import wonspring.splearn.domain.Email;
+import wonspring.splearn.domain.shared.Email;
 
 /**
  * 이메일을 발송한다

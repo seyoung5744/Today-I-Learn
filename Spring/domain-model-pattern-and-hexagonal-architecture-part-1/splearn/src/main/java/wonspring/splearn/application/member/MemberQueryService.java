@@ -1,12 +1,12 @@
-package wonspring.splearn.application;
+package wonspring.splearn.application.member;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import wonspring.splearn.application.provided.MemberFinder;
-import wonspring.splearn.application.required.MemberRepository;
-import wonspring.splearn.domain.Member;
+import wonspring.splearn.application.member.provided.MemberFinder;
+import wonspring.splearn.application.member.required.MemberRepository;
+import wonspring.splearn.domain.member.Member;
 
 @Service
 @Transactional
