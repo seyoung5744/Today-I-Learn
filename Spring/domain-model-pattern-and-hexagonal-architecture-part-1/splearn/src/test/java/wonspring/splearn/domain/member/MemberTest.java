@@ -3,7 +3,6 @@ package wonspring.splearn.domain.member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static wonspring.splearn.domain.member.MemberFixture.createMemberRegisterRequest;
@@ -81,15 +80,6 @@ class MemberTest {
     }
 
     @Test
-    void changeNickname() {
-        assertThat(member.getNickname()).isEqualTo("Charlie");
-
-        member.changeNickname("Charlie2");
-
-        assertThat(member.getNickname()).isEqualTo("Charlie2");
-    }
-
-    @Test
     void changePassword() {
         member.changePassword("verysecret2", passwordEncoder);
 
@@ -128,6 +118,14 @@ class MemberTest {
         assertThat(member.getNickname()).isEqualTo(request.nickname());
         assertThat(member.getDetail().getProfile().address()).isEqualTo(request.profileAddress());
         assertThat(member.getDetail().getIntroduction()).isEqualTo(request.introduction());
+    }
+
+    @Test
+    void updateInfoFail() {
+        assertThatThrownBy(() -> {
+            var request = new MemberInfoUpdateRequest("Leo", "won12345", "자기소개");
+            member.updateInfo(request);
+        }).isInstanceOf(IllegalStateException.class);
     }
 
 }
