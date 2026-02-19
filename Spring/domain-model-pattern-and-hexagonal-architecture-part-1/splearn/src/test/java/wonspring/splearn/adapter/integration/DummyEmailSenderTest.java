@@ -1,10 +1,9 @@
 package wonspring.splearn.adapter.integration;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.StdIo;
 import org.junitpioneer.jupiter.StdOut;
-import wonspring.splearn.domain.Email;
+import wonspring.splearn.domain.shared.Email;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

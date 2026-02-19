@@ -1,4 +1,4 @@
-package wonspring.splearn.domain;
+package wonspring.splearn.domain.shared;
 
 import java.util.regex.Pattern;
 

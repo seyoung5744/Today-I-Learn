@@ -1,12 +1,13 @@
-package wonspring.splearn.domain;
+package wonspring.splearn.domain.member;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static wonspring.splearn.domain.MemberFixture.createMemberRegisterRequest;
-import static wonspring.splearn.domain.MemberFixture.createPasswordEncoder;
+import static wonspring.splearn.domain.member.MemberFixture.createMemberRegisterRequest;
+import static wonspring.splearn.domain.member.MemberFixture.createPasswordEncoder;
 
 class MemberTest {
 
@@ -23,6 +24,10 @@ class MemberTest {
     @Test
     void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
+        // 1. java clock
+        // 2. mockito 로 static return 값을 고정시켜두고 테스트
+        // 3. 현재는 복잡도로 인해 단순 값 유무로만 테스트
+        assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test
@@ -30,6 +35,7 @@ class MemberTest {
         member.activate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(member.getDetail().getActivatedAt()).isNotNull();
     }
 
     @Test
@@ -48,6 +54,7 @@ class MemberTest {
         member.deactivate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
     }
 
     @Test
@@ -109,6 +116,18 @@ class MemberTest {
         ).isInstanceOf(IllegalArgumentException.class);
 
         Member.register(createMemberRegisterRequest(), passwordEncoder);
+    }
+
+    @Test
+    void updateInfo() {
+        member.activate();
+
+        var request = new MemberInfoUpdateRequest("Leo", "won12345", "자기소개");
+        member.updateInfo(request);
+
+        assertThat(member.getNickname()).isEqualTo(request.nickname());
+        assertThat(member.getDetail().getProfile().address()).isEqualTo(request.profileAddress());
+        assertThat(member.getDetail().getIntroduction()).isEqualTo(request.introduction());
     }
 
 }

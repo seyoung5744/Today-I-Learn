@@ -1,4 +1,4 @@
-package wonspring.splearn.domain;
+package wonspring.splearn.domain.member;
 
 public class DuplicateEmailException extends RuntimeException {
 

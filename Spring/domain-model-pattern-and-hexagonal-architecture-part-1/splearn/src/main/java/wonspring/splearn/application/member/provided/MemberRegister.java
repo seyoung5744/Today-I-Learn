@@ -1,8 +1,8 @@
-package wonspring.splearn.application.provided;
+package wonspring.splearn.application.member.provided;
 
 import jakarta.validation.Valid;
-import wonspring.splearn.domain.Member;
-import wonspring.splearn.domain.MemberRegisterRequest;
+import wonspring.splearn.domain.member.Member;
+import wonspring.splearn.domain.member.MemberRegisterRequest;
 
 /**
  * 회원의 등록과 관련된 기능을 제공한다

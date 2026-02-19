@@ -1,14 +1,18 @@
-package wonspring.splearn.application;
+package wonspring.splearn.application.member;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import wonspring.splearn.application.provided.MemberFinder;
-import wonspring.splearn.application.provided.MemberRegister;
-import wonspring.splearn.application.required.EmailSender;
-import wonspring.splearn.application.required.MemberRepository;
-import wonspring.splearn.domain.*;
+import wonspring.splearn.application.member.provided.MemberFinder;
+import wonspring.splearn.application.member.provided.MemberRegister;
+import wonspring.splearn.application.member.required.EmailSender;
+import wonspring.splearn.application.member.required.MemberRepository;
+import wonspring.splearn.domain.member.DuplicateEmailException;
+import wonspring.splearn.domain.member.Member;
+import wonspring.splearn.domain.member.MemberRegisterRequest;
+import wonspring.splearn.domain.member.PasswordEncoder;
+import wonspring.splearn.domain.shared.Email;
 
 @Service
 @Transactional
