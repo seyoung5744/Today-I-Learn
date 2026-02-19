@@ -2,6 +2,7 @@ package wonspring.splearn.application.member.provided;
 
 import jakarta.validation.Valid;
 import wonspring.splearn.domain.member.Member;
+import wonspring.splearn.domain.member.MemberInfoUpdateRequest;
 import wonspring.splearn.domain.member.MemberRegisterRequest;
 
 /**
@@ -12,4 +13,8 @@ public interface MemberRegister {
     Member register(@Valid MemberRegisterRequest registerRequest);
 
     Member activate(Long memberId);
+
+    Member deactivate(Long memberId);
+
+    Member updateInfo(Long memberId, @Valid MemberInfoUpdateRequest updateRequest);
 }

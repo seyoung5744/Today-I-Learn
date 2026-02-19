@@ -8,10 +8,7 @@ import wonspring.splearn.application.member.provided.MemberFinder;
 import wonspring.splearn.application.member.provided.MemberRegister;
 import wonspring.splearn.application.member.required.EmailSender;
 import wonspring.splearn.application.member.required.MemberRepository;
-import wonspring.splearn.domain.member.DuplicateEmailException;
-import wonspring.splearn.domain.member.Member;
-import wonspring.splearn.domain.member.MemberRegisterRequest;
-import wonspring.splearn.domain.member.PasswordEncoder;
+import wonspring.splearn.domain.member.*;
 import wonspring.splearn.domain.shared.Email;
 
 @Service
@@ -43,6 +40,24 @@ public class MemberModifyService implements MemberRegister {
         Member member = memberFinder.find(memberId);
 
         member.activate();
+
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public Member deactivate(Long memberId) {
+        Member member = memberFinder.find(memberId);
+
+        member.deactivate();
+
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public Member updateInfo(Long memberId, MemberInfoUpdateRequest updateRequest) {
+        Member member = memberFinder.find(memberId);
+
+        member.updateInfo(updateRequest);
 
         return memberRepository.save(member);
     }

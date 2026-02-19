@@ -1,8 +1,8 @@
 package wonspring.splearn.application.member.required;
 
 import org.springframework.data.repository.Repository;
-import wonspring.splearn.domain.shared.Email;
 import wonspring.splearn.domain.member.Member;
+import wonspring.splearn.domain.shared.Email;
 
 import java.util.Optional;
 
