@@ -1,6 +1,5 @@
 package wonspring.splearn.application.member.required;
 
-import com.fasterxml.jackson.databind.introspect.AnnotationCollector;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import wonspring.splearn.domain.member.Member;
