@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import wonspring.splearn.SplearnTestConfiguration;
+import wonspring.splearn.domain.member.MemberRegisterRequest;
 import wonspring.splearn.domain.member.*;
 
 import static org.assertj.core.api.Assertions.assertThat;

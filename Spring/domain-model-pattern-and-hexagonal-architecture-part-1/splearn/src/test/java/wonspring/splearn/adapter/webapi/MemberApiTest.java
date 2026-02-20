@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 import wonspring.splearn.adapter.webapi.dto.MemberRegisterResponse;
 import wonspring.splearn.application.member.provided.MemberRegister;
@@ -22,9 +21,8 @@ import wonspring.splearn.domain.member.MemberStatus;
 
 import java.io.UnsupportedEncodingException;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static wonspring.splearn.AsserThatUtils.equalsTo;
 import static wonspring.splearn.AsserThatUtils.notNull;
 
@@ -32,7 +30,7 @@ import static wonspring.splearn.AsserThatUtils.notNull;
 @AutoConfigureMockMvc
 @Transactional
 @RequiredArgsConstructor
-public class MemberApiTest {
+class MemberApiTest {
 
     final MockMvcTester mvcTester;
     final ObjectMapper objectMapper;
