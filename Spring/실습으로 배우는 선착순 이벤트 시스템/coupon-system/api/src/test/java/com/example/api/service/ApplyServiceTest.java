@@ -1,9 +1,11 @@
 package com.example.api.service;
 
 import com.example.api.repository.CouponRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -19,6 +21,14 @@ class ApplyServiceTest {
 
     @Autowired
     CouponRepository couponRepository;
+
+    @Autowired
+    StringRedisTemplate redisTemplate;
+
+    @AfterEach
+    void tearDown() {
+        redisTemplate.delete("coupon_count");
+    }
 
     @Test
     void 한번만응모() {
